@@ -1,0 +1,22 @@
+field,type
+flight_id,string
+callsign,string
+icao24,string
+landing_time,"timestamp[ns, tz=UTC]"
+registration,string
+typecode,string
+icaoaircrafttype,string
+airport,string
+country,string
+attempt_times,"list<element: timestamp[us, tz=UTC]>"
+ILS,list<element: string>
+n_attempts,int64
+GoA,bool
+market_segment,string
+AC_CLASS,string
+AP_C_RWY,string
+C40_CROSS_TIME,"timestamp[ns, tz=UTC]"
+C40_BEARING,double
+C40_CROSS_LAT,double
+C40_CROSS_LON,double
+__index_level_0__,int64
