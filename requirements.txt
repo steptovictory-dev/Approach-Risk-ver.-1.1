@@ -5,3 +5,6 @@ nbformat
 nbclient
 ipykernel
 pyarrow
+scikit-learn
+scipy
+joblib

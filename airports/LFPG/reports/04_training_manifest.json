@@ -1,0 +1,72 @@
+{
+  "date": "2025-01-15",
+  "runway": "09L",
+  "candidate_events": 37,
+  "aircraft": 35,
+  "observed_pairs": 633,
+  "split": [
+    {
+      "split": "train",
+      "events": 21,
+      "aircraft": 21,
+      "pairs": 347,
+      "horizon_min_s": 27.019999980926514,
+      "horizon_median_s": 30.149999856948853,
+      "horizon_max_s": 32.99000000953674
+    },
+    {
+      "split": "validation",
+      "events": 8,
+      "aircraft": 7,
+      "pairs": 128,
+      "horizon_min_s": 27.039999961853027,
+      "horizon_median_s": 30.02999997138977,
+      "horizon_max_s": 32.99000000953674
+    },
+    {
+      "split": "test",
+      "events": 8,
+      "aircraft": 7,
+      "pairs": 158,
+      "horizon_min_s": 27.200000047683716,
+      "horizon_median_s": 30.144999980926514,
+      "horizon_max_s": 32.830000162124634
+    }
+  ],
+  "selected_alpha": 0.1,
+  "baseline_macro_mae_ft": 67.74519079764293,
+  "ridge_macro_mae_ft": 23.706262191225672,
+  "improvement_pct": 65.00672311627693,
+  "bootstrap": {
+    "resampling_unit": "icao24",
+    "independent_groups": 7,
+    "repetitions": 5000,
+    "ridge_minus_baseline_mae_ft": -44.03892860641726,
+    "conditional_interval_2_5_ft": -57.80772017401284,
+    "conditional_interval_97_5_ft": -29.20454527152146
+  },
+  "conclusion": "Поправка улучшила прогноз в этой контрольной когорте; требуется независимый день",
+  "protocol_sha256": "81415291b667aed9afb2f259292336554c5ed0f6c2da33ec9b7db96bdf83c6e8",
+  "inputs_sha256": {
+    "data/2025-01-15/event_candidate_points.parquet": "542d625333fec1e74c8893706d413313f1c7bfb4a5356e2509d9aca24753f677",
+    "reports/03_event_candidates.csv": "47b4f09f251f923812494fe913eb5e24cdfaa87c36a82875c39df13b87bd21b9",
+    "reports/03_runway_geometry.csv": "37c945d229d033d6bb871ce4ea0b8927d1315ed1dc4985fe6399fc8b6dfd0184",
+    "reports/03_geometry_sources.json": "f856bce0f44f7b2431595e9f25d7b761b5795feaee41a86c5a3ce9f66ab6f88b"
+  },
+  "implementation_sha256": {
+    "scripts/lfpg_training.py": "ec2d64d735532480cf94f08af0e115f286fc24495b869e4d93820e311cd64b25",
+    "scripts/build_lfpg_training_notebook.py": "2bb5b813e7e7406f1c2a9a3e00af291159743ae88b55efa164d4a5cbd99ccd56",
+    "scripts/execute_notebook.py": "b4028ddda83e6b59c474e542ece2dee015881831c62c0b437edb0ff30f2a02fa"
+  },
+  "model_sha256": "0f0359fb54a6d5f254d1fb46d7c0c88eccec9104d2f5e39a1aa4f815b0589458",
+  "examples_sha256": "536c587c75bfb60369d76738a33ffcbd7392766647af3f7a4890793c764652d1",
+  "target_interpolation": false,
+  "forecast_horizon": "observed 30 +/- 3 seconds",
+  "future_weather_used": false,
+  "split_is_chronological": false,
+  "test_used_for_tuning": false,
+  "glideslope_capture_verified": false,
+  "true_height_verified": false,
+  "historical_notam_verified": false,
+  "goaround_model_trained": false
+}

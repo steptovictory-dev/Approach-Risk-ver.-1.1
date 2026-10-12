@@ -1,0 +1,8 @@
+{
+  "resampling_unit": "icao24",
+  "independent_groups": 7,
+  "repetitions": 5000,
+  "ridge_minus_baseline_mae_ft": -44.03892860641726,
+  "conditional_interval_2_5_ft": -57.80772017401284,
+  "conditional_interval_97_5_ft": -29.20454527152146
+}

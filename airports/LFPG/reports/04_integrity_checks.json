@@ -1,0 +1,9 @@
+{
+  "causal_prefix_checks": 633,
+  "future_mutation_event_checks": 37,
+  "observed_target_checks": 633,
+  "group_overlap": false,
+  "target_interpolation": false,
+  "future_weather_used_in_target": false,
+  "train_only_scaler_verified": true
+}

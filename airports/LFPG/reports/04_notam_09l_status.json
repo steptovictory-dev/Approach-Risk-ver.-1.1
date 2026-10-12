@@ -1,0 +1,46 @@
+{
+  "airport": "LFPG",
+  "runway": "09L/27R",
+  "requested_validity_start_utc": "2025-01-15T00:00:00Z",
+  "requested_validity_end_utc_exclusive": "2025-01-16T00:00:00Z",
+  "checked_date": "2026-10-12",
+  "status": "historical_text_not_obtained",
+  "historical_notam_attached": false,
+  "complete_active_set_verified": false,
+  "notam_features_used": false,
+  "absence_of_notam_claimed": false,
+  "sources": [
+    {
+      "role": "official service routing",
+      "url": "https://www.sia.aviation-civile.gouv.fr/faqs",
+      "finding": "SIA website does not host NOTAM; official lookup is SOFIA-Briefing"
+    },
+    {
+      "role": "official archive limitation",
+      "url": "https://sofia-briefing.aviation-civile.gouv.fr/content/sofia/datas/admin/medias/FAQ/Je%20travaille%20%C3%A0%20la%20DGAC/Je%20suis%20informateur%20a%C3%A9ronautique%20et%20je%20souhaite%20consulter%20des%20NOTAM.pdf",
+      "document_date": "2025-11-13",
+      "pages": [2, 5],
+      "finding": "Expired notices are available for 95 days after expiry; this service cannot establish a complete January 2025 snapshot now"
+    },
+    {
+      "role": "archive provider access",
+      "url": "https://notamify.com/notam-v2-endpoints",
+      "finding": "Provider documents a two-year archive with credit-based queries; no authorized API credentials are available in this study"
+    },
+    {
+      "role": "excluded later document",
+      "url": "https://www.sia.aviation-civile.gouv.fr/media/store/documents/file/l/f/lf_sup_a_2025_013_fr.pdf",
+      "document": "SUP AIP AIRAC 013/25",
+      "published_date": "2025-02-13",
+      "validity_start_utc": "2025-04-14T03:00:00Z",
+      "validity_end_utc": "2025-05-26T03:00:00Z",
+      "finding": "09L/27R closure relates to April–May 2025; it is not a NOTAM and is not applicable to this January pilot"
+    }
+  ],
+  "required_evidence": [
+    "Original archive export or preserved PIB with source and retrieval timestamp",
+    "NOTAM series, number, year, Q line, A/B/C/D/E fields and replacement/cancellation chain",
+    "Validity and schedules checked against each candidate UTC timestamp",
+    "Coverage of runway, displaced threshold, declared distances, ILS and approach procedure restrictions"
+  ]
+}

@@ -1,0 +1,50 @@
+{
+  "study": "LFPG 09L – short-horizon altitude dynamics",
+  "date": "2025-01-15",
+  "cohort_size": 37,
+  "maximum_trace_gap_s": 30,
+  "minimum_precontrol_span_s": 60,
+  "control_height_proxy_ft": 300,
+  "airport_elevation_ft": 392,
+  "nominal_horizon_s": 30,
+  "target_time_tolerance_s": 3,
+  "history_minimum_s": 5,
+  "history_maximum_s": 30,
+  "seed": 20250115,
+  "test_group_fraction": 0.2,
+  "validation_remaining_group_fraction": 0.25,
+  "group_key": "icao24",
+  "features": [
+    "height_ft",
+    "vertical_rate_fps",
+    "past_height_rate_fps",
+    "speed_knots",
+    "distance_m",
+    "lateral_m",
+    "heading_error_deg",
+    "past_gap_s",
+    "horizon_s"
+  ],
+  "model": "StandardScaler + residual Ridge",
+  "ridge_alphas": [
+    0.1,
+    1,
+    10,
+    100,
+    1000
+  ],
+  "selection_metric": "mean of event MAE in ft on validation",
+  "training_weights": "equal total weight per event",
+  "target": "future observed pressure altitude mapped with QNH available at forecast origin",
+  "target_interpolation": false,
+  "bootstrap_repetitions": 5000,
+  "test_retraining": false,
+  "goaround_classifier": false,
+  "historical_notam_verified": false,
+  "inputs_sha256": {
+    "data/2025-01-15/event_candidate_points.parquet": "542d625333fec1e74c8893706d413313f1c7bfb4a5356e2509d9aca24753f677",
+    "reports/03_event_candidates.csv": "47b4f09f251f923812494fe913eb5e24cdfaa87c36a82875c39df13b87bd21b9",
+    "reports/03_runway_geometry.csv": "37c945d229d033d6bb871ce4ea0b8927d1315ed1dc4985fe6399fc8b6dfd0184",
+    "reports/03_geometry_sources.json": "f856bce0f44f7b2431595e9f25d7b761b5795feaee41a86c5a3ce9f66ab6f88b"
+  }
+}
