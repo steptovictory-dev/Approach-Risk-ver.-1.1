@@ -9,6 +9,14 @@
   "complete_active_set_verified": false,
   "notam_features_used": false,
   "absence_of_notam_claimed": false,
+  "available_example": {
+    "notice_id": "A3237/26",
+    "checked_date": "2026-10-13",
+    "report": "04_NOTAM_09L_A3237-26.md",
+    "metadata": "04_notam_09l_example.json",
+    "source_kind": "secondary_republication_of_notam",
+    "applicable_to_requested_period": false
+  },
   "sources": [
     {
       "role": "official service routing",

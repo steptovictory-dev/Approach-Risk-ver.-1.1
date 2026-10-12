@@ -20,11 +20,11 @@ def code(text):
 
 
 md('''# Конечный заход: короткий горизонт прогноза
-## Париж, Шарль-де-Голль · LFPG · 09L
+## Париж, Шарль-де-Голль, LFPG, 09L
 
-**Исследование 04 · 15 января 2025 · Approach Risk 1.1**
+**Исследование 04, 15 января 2025, Approach Risk 1.1**
 
-**37 кандидатов** · **35 воздушных судов** · **30 секунд номинального прогноза** · **300 ft контрольного прокси**
+**37 кандидатов**, **35 воздушных судов**, **30 секунд номинального прогноза**, **300 ft контрольного прокси**
 
 Насколько информативно продолжение текущего снижения и может ли компактная модель уточнить его на конечном участке захода?
 
@@ -69,6 +69,7 @@ events = pd.read_csv(REPORTS / '03_event_candidates.csv')
 points = pd.read_parquet(DATA / 'event_candidate_points.parquet')
 geometry = pd.read_csv(REPORTS / '03_runway_geometry.csv')
 notam = json.loads((REPORTS / '04_notam_09l_status.json').read_text(encoding='utf-8'))
+notam_example = json.loads((REPORTS / '04_notam_09l_example.json').read_text(encoding='utf-8'))
 assert points.utc.ge(pd.Timestamp('2025-01-15', tz='UTC')).all()
 assert points.utc.lt(pd.Timestamp('2025-01-16', tz='UTC')).all()
 assert not notam['historical_notam_attached']
@@ -103,7 +104,7 @@ def panel(title, body, color=GREEN):
         f'background:#F4F8F7;margin:12px 0;color:{INK}"><b>{title}</b><br>{body}</div>'))
 
 print('Данные загружены локально; параметры и границы эксперимента зафиксированы')''')
-md(r'''## 01 · Авиационная постановка
+md(r'''## 01 Авиационная постановка
 
 На коротком горизонте естественная точка сравнения – сохранение текущей вертикальной скорости. Если она составляет −700 ft/min, за 30 с ожидается снижение на 350 ft. Модель должна показать, добавляют ли предыдущие наблюдения и геометрия конечного участка полезное уточнение.
 
@@ -118,10 +119,10 @@ $h_{Q(t)}$ – барометрический прокси высоты над �
 code('''# Показываем последовательность решения в одном визуальном кадре
 fig, ax = plt.subplots(figsize=(12, 2.2))
 ax.axis('off')
-steps = [('Наблюдения до t', 'Высота · Vz · GS · track'),
+steps = [('Наблюдения до t', 'Высота, Vz, GS, track'),
          ('Продолжение снижения', 'Физический прогноз'),
          ('Обученная поправка', 'Ridge по прошлой динамике'),
-         ('Новые борта', 'Ошибка в ft · по заходам')]
+         ('Новые борта', 'Ошибка в ft, по заходам')]
 for i, (title, detail) in enumerate(steps):
     x = .01 + i * .25
     ax.add_patch(plt.Rectangle((x, .25), .225, .55, transform=ax.transAxes,
@@ -132,7 +133,7 @@ for i, (title, detail) in enumerate(steps):
         ax.annotate('', xy=(x + .25, .52), xytext=(x + .225, .52), xycoords='axes fraction',
                     arrowprops={'arrowstyle': '->', 'color': GREY})
 savefig(fig, '04_research_flow')''')
-md('''## 02 · Когорта: 37 кандидатов 09L
+md('''## 02 Когорта: 37 кандидатов 09L
 
 Кандидаты наследуются из независимого геометрического аудита этапа 03: прибытие в коридоре продолжения 09L, наблюдаемое пересечение прокси 300 ft, минимум 60 с покрытия до границы и отсутствие конкурирующего назначения на параллельную полосу.
 
@@ -148,7 +149,7 @@ split_summary = cohort.groupby('split').agg(events=('event_id', 'size'),
 split_summary = split_summary.reindex(['train', 'validation', 'test']).reset_index()
 table(split_summary)
 assert len(cohort) == 37 and cohort.icao24.nunique() == 35
-panel('Отбор зафиксирован', '37 заходов-кандидатов · 35 бортов · 1 аэропорт · 1 сутки · 1 направление ВПП')
+panel('Отбор зафиксирован', '37 заходов-кандидатов, 35 бортов, 1 аэропорт, 1 сутки, 1 направление ВПП')
 
 # Геометрия относится к выбранной когорте, а не ко всем прибытиям суток
 runway = geometry.loc[geometry.runway.eq('09L')].iloc[0]
@@ -171,7 +172,7 @@ axes[1].set(title='Цена требования к временному пок�
             ylabel='Кандидаты с покрытием 300 ft', ylim=(0, 43))
 fig.tight_layout()
 savefig(fig, '04_cohort_and_coverage')''')
-md(r'''## 03 · Причинность: какую информацию видит модель
+md(r'''## 03 Причинность: какую информацию видит модель
 
 В момент $t$ признаки строятся только по префиксу траектории до $t$ включительно. Предыдущая точка выбирается из интервала 5–30 с в прошлом. Геометрическая вертикальная скорость исключается: ее нельзя смешивать с барометрическим высотным target.
 
@@ -215,7 +216,7 @@ feature_dictionary = pd.DataFrame([
     columns=['Признак', 'Единица', 'Авиационный смысл'])
 feature_dictionary.to_csv(REPORTS / '04_feature_dictionary.csv', index=False)
 table(feature_dictionary)''')
-md('''## 04 · Независимая проверка: целые борта
+md('''## 04 Независимая проверка: целые борта
 
 Разделение фиксируется по **ICAO24**: 60% групп для обучения, 20% для выбора регуляризации и 20% для финальной проверки. Два повторных захода того же борта остаются в одной части. Seed и список групп сохраняются.
 
@@ -250,7 +251,7 @@ axes[1].set(xticks=[0, 1, 2], xticklabels=['train', 'validation', 'test'],
             ylabel='Пар наблюдений на кандидата', title='Количество строк не равно числу полетов')
 fig.tight_layout()
 savefig(fig, '04_group_split')''')
-md(r'''## 05 · Обучение поправки к физическому прогнозу
+md(r'''## 05 Обучение поправки к физическому прогнозу
 
 Выбран Ridge: линейная поправка с L2-регуляризацией. На малой когорте она дает проверяемую модель с ограниченным числом параметров и позволяет оценить вклад признаков без большого пространства настройки.
 
@@ -287,7 +288,7 @@ assert np.allclose(selected_model.named_steps['scale'].mean_, expected_mean)
 joblib.dump({'model': selected_model, 'features': FEATURES, 'protocol': protocol,
              'selected_alpha': selected_alpha}, ARTIFACTS / 'altitude_residual_ridge.joblib')
 print('Обученная модель сохранена в игнорируемой папке artifacts')''')
-md('''## 06 · Контроль причинности и целевой шкалы
+md('''## 06 Контроль причинности и целевой шкалы
 
 Проверяем четыре свойства, которые прямо влияют на достоверность результата: признаки совпадают при удалении будущего; подмена будущих измерений не меняет доступные признаки; baseline и target используют одну шкалу текущего QNH; общие борта и треки отсутствуют между частями.
 
@@ -324,9 +325,9 @@ checks = {'causal_prefix_checks': causal_checks, 'future_mutation_event_checks':
     'target_interpolation': False, 'future_weather_used_in_target': False,
     'train_only_scaler_verified': True}
 (REPORTS / '04_integrity_checks.json').write_text(json.dumps(checks, ensure_ascii=False, indent=2), encoding='utf-8')
-panel('Контроль данных пройден', f'{causal_checks} префиксов признаков · '
-      f'{target_checks} наблюдаемых целей · подмена будущего проверена для 37 кандидатов')''')
-md('''## 07 · Проверка выбранной модели
+panel('Контроль данных пройден', f'{causal_checks} префиксов признаков, '
+      f'{target_checks} наблюдаемых целей, подмена будущего проверена для 37 кандидатов')''')
+md('''## 07 Проверка выбранной модели
 
 Основная метрика **macro MAE**: сначала средняя абсолютная ошибка каждого захода, затем равновесное среднее по заходам. Macro RMSE вычисляется из среднего квадратов ошибок по заходам. Дополнительно показаны построчная MAE, 95-й процентиль абсолютной ошибки и знаковое смещение.
 
@@ -398,7 +399,7 @@ for ax in axes:
     ax.legend(fontsize=8)
 fig.tight_layout()
 savefig(fig, '04_error_structure')''')
-md('''## 08 · Как модель вносит поправку
+md('''## 08 Как модель вносит поправку
 
 Коэффициенты показывают изменение поправки в ft при изменении признака на одно стандартное отклонение train, при фиксированных остальных признаках. Это описание обученной линейной модели. Коррелированные высота, удаление и вертикальная динамика не позволяют читать коэффициенты как независимые причинные эффекты.
 
@@ -440,7 +441,7 @@ panel('Как меняется влияние текущей вертикаль�
     f'{effective_vz_coefficient:.2f} с вместо 30 с у baseline. '
     'Обученная поправка существенно ослабляет прямой вклад текущей Vz; '
     'это требует отдельной проверки при отклонении от обычного снижения.')''')
-md('''## 09 · Разбор конкретных заходов
+md('''## 09 Разбор конкретных заходов
 
 Правило выбора примеров задано заранее: первый и последний test-кандидат по времени суток и кандидат с наибольшей ошибкой физического baseline. При совпадении берется следующий кандидат по времени. Это диагностические иллюстрации, не отдельный эксперимент.
 
@@ -471,7 +472,7 @@ for ax, event_id in zip(axes[:, 0], case_ids):
             marker='o', ms=3, label='Vz + Ridge')
     ax.axhline(300, color=GREY, ls='--', lw=1)
     time_label = candidate.start_utc.strftime('%H:%M UTC')
-    ax.set(title=f'{event_id[:8]} · {time_label} · '
+    ax.set(title=f'{event_id[:8]}, {time_label}, '
            f'MAE {wide.loc[event_id, "Constant vertical rate"]:.1f} → '
            f'{wide.loc[event_id, "Ridge correction"]:.1f} ft',
            xlabel='Время от первого наблюдения кандидата, с', ylabel='Высотный прокси, ft')
@@ -482,7 +483,23 @@ for ax, event_id in zip(axes[:, 0], case_ids):
 fig.tight_layout()
 savefig(fig, '04_approach_cases')
 pd.DataFrame(case_rows).to_csv(REPORTS / '04_case_selection.csv', index=False)''')
-md('''## 10 · Исторические NOTAM 09L: приложение к исследованию
+md('''## 10 NOTAM 09L: документ и границы применимости
+
+### Найденное сообщение A3237/26
+
+В [опубликованном тексте NOTAM](https://notamify.com/notams/LFPG/a1750904-201a-40ab-a66d-d70265c0bceb) указано обслуживание ILS направлений **09L и 27R**. Период B/C: **26.05.2026 11:30 UTC – 27.05.2026 15:30 UTC**; расписание D: **ежедневно 11:30–15:30 UTC**. Это два отдельных четырехчасовых окна.
+
+Короткий фрагмент поля E:
+
+> ILS RWY 09L 109.350MHZ AND ILS RWY 27R 110.350MHZ U/S : MAINTENANCE, DO NOT USE POSSIBLE FALSE INDICATION.
+
+**Авиационный смысл:** ILS недоступны на время обслуживания, их использование запрещено, возможны ложные показания. Это ограничение наведения; сообщение само по себе не объявляет закрытие ВПП. Совпадение ADS-B траектории с осью и расчетным профилем не подтверждает исправность ILS и фактический захват глиссады.
+
+Источник – перепубликация Notamify, проверенная 13.10.2026. Официальный оригинал и цепочка замены/отмены не получены. Срок по полю C закончился. [Приложение с полями и разбором](../reports/04_NOTAM_09L_A3237-26.md), [происхождение в JSON](../reports/04_notam_09l_example.json).
+
+**Этот NOTAM относится к маю 2026 и не применим к 37 кандидатам за 15.01.2025.** Он служит документальным примером для 09L и не входит в признаки или отбор.
+
+### Исторический комплект на дату пилота
 
 **Запрошен комплект, действовавший 15.01.2025. Оригинальный текст пока не получен.**
 
@@ -493,7 +510,27 @@ md('''## 10 · Исторические NOTAM 09L: приложение к ис�
 Найденный [SUP AIP AIRAC 013/25](https://www.sia.aviation-civile.gouv.fr/media/store/documents/file/l/f/lf_sup_a_2025_013_fr.pdf) касается закрытия 09L/27R в апреле–мае 2025. Он опубликован после дня пилота, не является январским NOTAM и исключен из интерпретации этих траекторий.
 
 До получения оригинального комплекта историческая доступность ILS, эксплуатационное состояние ВПП и временные изменения порога остаются непроверенными. Номинальная геометрия взята из снимка OurAirports до даты пилота. Порог 300 ft является исследовательским прокси и не подменяет DA/H или MDA/H процедуры.''')
-code('''# Включаем в выполненный ноутбук проверяемый статус запрошенного приложения
+code('''# Показываем поля найденного сообщения и отдельно проверяем его дату
+table(pd.DataFrame([
+    {'Поле': 'Номер', 'Значение': notam_example['notice_id']},
+    {'Поле': 'Q', 'Значение': notam_example['q_line']},
+    {'Поле': 'A', 'Значение': notam_example['airport']},
+    {'Поле': 'B', 'Значение': notam_example['validity_start_utc']},
+    {'Поле': 'C', 'Значение': notam_example['validity_end_utc']},
+    {'Поле': 'D', 'Значение': 'Ежедневно 11:30–15:30 UTC'},
+    {'Поле': 'E, смысл', 'Значение': notam_example['meaning_ru']}]))
+notice_start = pd.Timestamp(notam_example['validity_start_utc'])
+notice_end = pd.Timestamp(notam_example['validity_end_utc'])
+pilot_start = pd.Timestamp(protocol['date'], tz='UTC')
+pilot_end = pilot_start + pd.Timedelta(days=1)
+overlaps_pilot = notice_start < pilot_end and notice_end > pilot_start
+assert not overlaps_pilot and not notam_example['applicable_to_2025_01_15_pilot']
+assert not notam_example['used_in_model_features']
+panel('Документ найден, даты разграничены',
+      f"{notam_example['notice_id']}: май 2026; пилот: январь 2025. "
+      'Временного пересечения нет; условия этого сообщения не перенесены на кандидатов')
+
+# Включаем в выполненный ноутбук проверяемый статус исторического приложения
 document_table = pd.DataFrame([
     {'Проверка': 'Исторический оригинал NOTAM / PIB', 'Статус': 'Не получен'},
     {'Проверка': 'Полнота действовавшего комплекта 15.01.2025', 'Статус': 'Не подтверждена'},
@@ -502,7 +539,7 @@ document_table = pd.DataFrame([
     {'Проверка': 'Отсутствие ограничений заявлено', 'Статус': 'Нет'}])
 table(document_table)
 assert not notam['complete_active_set_verified'] and not notam['notam_features_used']''')
-md('''## 11 · Результат и границы интерпретации
+md('''## 11 Результат и границы интерпретации
 
 Ниже вывод формируется из фактически выполненного эксперимента. Выигрыш модели оценивается относительно продолжения текущей Vz, а не относительно постоянной высоты или другого слабого baseline.
 
@@ -564,10 +601,12 @@ result_text = chr(10).join([
     'bootstrap целыми бортами. Вывод относится к одной контрольной когорте одного дня.', '',
     'Оригинальные исторические NOTAM / PIB не получены. '
     'Статус и источники: [приложение](04_NOTAM_09L_2025-01-15.md). '
+    'Найден [пример A3237/26](04_NOTAM_09L_A3237-26.md) за май 2026; '
+    'к январскому пилоту он не применим. '
     'GoA, истинная высота и фактический захват ILS не подтверждены.', ''])
 (REPORTS / '04_research_result.md').write_text(result_text, encoding='utf-8')
 print('Протокол, модель, парные прогнозы, таблицы, рисунки и манифест сохранены')''')
-md('''## 12 · Следующий проверяемый шаг
+md('''## 12 Следующий проверяемый шаг
 
 Сохранить этот эксперимент без изменения признаков по результатам test. Получить оригинальные NOTAM/PIB на дату пилота и проверить историческую геометрию. Затем воспроизвести замороженную модель на другом дне LFPG; после этого оценивать переносимость на EGLL.
 
@@ -575,7 +614,7 @@ md('''## 12 · Следующий проверяемый шаг
 
 **Воспроизведение:** выполнить ячейки последовательно из `airports/LFPG/notebooks` либо запустить из корня проекта `python scripts/build_lfpg_training_notebook.py`. Данные и модель хранятся локально в игнорируемых `data` и `artifacts`; публичные отчеты содержат протокол, агрегаты, рисунки и контрольные суммы.
 
-**Источники данных и семантики:** [ADSB.lol, архив 2025](https://github.com/adsblol/globe_history_2025) · [формат trace readsb](https://github.com/wiedehopf/readsb/blob/dev/README-json.md) · [OurAirports](https://ourairports.com/data/) · [исторический снимок геометрии](https://github.com/davidmegginson/ourairports-data/tree/121faf552580e224617e23867e491f8b5b7bc0f9) · [IEM METAR](https://mesonet.agron.iastate.edu/request/download.phtml?network=FR__ASOS) · [FAA: барометрическая высота ADS-B](https://www.faa.gov/documentLibrary/media/Advisory_Circular/AC%2020-165.pdf) · [модель стандартной атмосферы](https://ntrs.nasa.gov/api/citations/19930090991/downloads/19930090991.pdf).
+**Источники данных и семантики:** [ADSB.lol, архив 2025](https://github.com/adsblol/globe_history_2025), [формат trace readsb](https://github.com/wiedehopf/readsb/blob/dev/README-json.md), [OurAirports](https://ourairports.com/data/), [исторический снимок геометрии](https://github.com/davidmegginson/ourairports-data/tree/121faf552580e224617e23867e491f8b5b7bc0f9), [IEM METAR](https://mesonet.agron.iastate.edu/request/download.phtml?network=FR__ASOS), [FAA: барометрическая высота ADS-B](https://www.faa.gov/documentLibrary/media/Advisory_Circular/AC%2020-165.pdf), [модель стандартной атмосферы](https://ntrs.nasa.gov/api/citations/19930090991/downloads/19930090991.pdf).
 
 Архив ADSB.lol опубликован под ODbL 1.0. Производные таблицы и рисунки этого пилота ссылаются на него и на манифест происхождения этапа 02; сырые данные исключены из Git.''')
 

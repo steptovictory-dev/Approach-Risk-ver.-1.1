@@ -1,0 +1,27 @@
+{
+  "notice_id": "A3237/26",
+  "notice_type": "NOTAMN",
+  "airport": "LFPG",
+  "runways": ["09L", "27R"],
+  "q_line": "LFFF/QICAS/I /NBO/A /000/999/4901N00233E005",
+  "b_encoded": "2605261130",
+  "c_encoded": "2605271530",
+  "d_encoded": "1130-1530",
+  "validity_start_utc": "2026-05-26T11:30:00Z",
+  "validity_end_utc": "2026-05-27T15:30:00Z",
+  "active_windows_utc": [
+    {"start": "2026-05-26T11:30:00Z", "end": "2026-05-26T15:30:00Z"},
+    {"start": "2026-05-27T11:30:00Z", "end": "2026-05-27T15:30:00Z"}
+  ],
+  "ils_frequencies_mhz": {"09L": 109.35, "27R": 110.35},
+  "meaning_ru": "Обслуживание ILS 09L и 27R: системы недоступны, использование запрещено, возможны ложные показания",
+  "source_url": "https://notamify.com/notams/LFPG/a1750904-201a-40ab-a66d-d70265c0bceb",
+  "source_kind": "secondary_republication_of_notam",
+  "checked_date": "2026-10-13",
+  "official_original_obtained": false,
+  "replacement_and_cancellation_chain_verified": false,
+  "complete_active_set_verified": false,
+  "status_by_published_end_date": "expired",
+  "applicable_to_2025_01_15_pilot": false,
+  "used_in_model_features": false
+}
