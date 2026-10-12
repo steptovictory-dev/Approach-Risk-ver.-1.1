@@ -1,0 +1,64 @@
+{
+  "study": "LFPG 09L model comparison 05",
+  "data_date": "2025-01-15",
+  "candidate_events": 37,
+  "aircraft": 35,
+  "observed_pairs": 633,
+  "split": [
+    {
+      "split": "test",
+      "examples": 158,
+      "events": 8,
+      "aircraft": 7
+    },
+    {
+      "split": "train",
+      "examples": 347,
+      "events": 21,
+      "aircraft": 21
+    },
+    {
+      "split": "validation",
+      "examples": 128,
+      "events": 8,
+      "aircraft": 7
+    }
+  ],
+  "tested_parameter_variants": 32,
+  "trained_families": 7,
+  "winner_by_validation": "SVR RBF",
+  "best_ml_by_validation": "SVR RBF",
+  "descriptive_test_leader": "Ridge",
+  "baseline_macro_mae_ft": 67.74519079764293,
+  "ridge_macro_mae_ft": 23.706262191225655,
+  "selected_test_macro_mae_ft": 27.072288069480674,
+  "test_previously_inspected": true,
+  "independent_new_test": false,
+  "selection_uses_test_scores": false,
+  "refit_on_validation": false,
+  "future_weather_used": false,
+  "target_interpolation": false,
+  "feature_selection": false,
+  "goaround_model_trained": false,
+  "historical_notam_verified": false,
+  "input_sha256": {
+    "examples": "536c587c75bfb60369d76738a33ffcbd7392766647af3f7a4890793c764652d1",
+    "cohort": "d7716e519ad592ec4256ebe01601a6d432247307fe3b027b0c78d34fd05a9ddb",
+    "prior_manifest": "258902b774d37f9ade9a64a77ffc260b8594c2879d4204fdac61c60e8b9d9921",
+    "plan": "e0d7d9a584078a5aa215882dfdfdc6f3c8a5f5bd83593ef248cf8bc0da86670b"
+  },
+  "selection_sha256": "6c823a30a8fef1aeaca057cc7ae563d1d7432efb7e3871ebb4cc16b7c5bc70a0",
+  "model_sha256": "76fc9dc4a2cdaed19eb832003831581a249c709f80d2059774f2d451b18d928a",
+  "predictions_sha256": "c92fb4574ee056b0b48dc857496baa11cdb4eb9cb2d790c143c1a1e3740ad1ea",
+  "implementation_sha256": {
+    "scripts/lfpg_model_comparison.py": "4a053e83d7576295e19c18953727bd47f60368406507be165fc96dc4245fe8eb",
+    "scripts/build_lfpg_model_comparison_notebook.py": "90b6afea5869bef4398ace60efe35b78d1816f739cee5f26847afab57e8f5e00",
+    "scripts/execute_notebook.py": "b4028ddda83e6b59c474e542ece2dee015881831c62c0b437edb0ff30f2a02fa"
+  },
+  "environment": {
+    "python": "3.14.6",
+    "sklearn": "1.9.1",
+    "numpy": "2.5.3",
+    "pandas": "3.0.6"
+  }
+}

@@ -33,3 +33,9 @@
 [Доступное сообщение A3237/26](airports/LFPG/reports/04_NOTAM_09L_A3237-26.md): обслуживание ILS 09L/27R 26–27 мая 2026, ежедневно 11:30–15:30 UTC. Поля и разбор включены в ноутбук как отдельный документальный пример; к пилоту за январь 2025 он не применим. Источник – перепубликация Notamify.
 
 Воспроизведение: `python scripts/build_lfpg_training_notebook.py`. Проверка сохраненных прогнозов, контрольных сумм и выводов: `python scripts/verify_lfpg_training.py`.
+
+## Сравнение моделей на общей когорте
+
+[Выполненный эксперимент 05](airports/LFPG/notebooks/05_model_comparison.ipynb): 32 варианта в 7 семействах, прежние 37 кандидатов и разделение по бортам, два физических ориентира. Параметры выбираются на validation. SVR RBF выбрана по validation (16.53 ft), но на повторно используемом test Ridge дала меньшую macro MAE: 23.71 против 27.07 ft у SVR. Это исследовательское сравнение; независимого нового test здесь нет.
+
+[Таблица результатов и границы выводов](airports/LFPG/reports/05_model_comparison_result.md). Отдельно показана реакция прогноза на текущую Vz. Воспроизведение: `python scripts/build_lfpg_model_comparison_notebook.py`; проверка: `python scripts/verify_lfpg_model_comparison.py`.

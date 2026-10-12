@@ -1,0 +1,96 @@
+{
+  "winner_by_validation": "SVR RBF",
+  "best_ml_by_validation": "SVR RBF",
+  "selection_metric": "validation macro_mae_ft",
+  "test_previously_inspected": true,
+  "refit_on_validation": false,
+  "selected_models": [
+    {
+      "model": "Ridge",
+      "kind": "ridge",
+      "candidate_index": 0,
+      "parameters": {
+        "alpha": 0.1,
+        "solver": "svd"
+      },
+      "validation_macro_mae_ft": 16.65114985869464
+    },
+    {
+      "model": "ElasticNet",
+      "kind": "elasticnet",
+      "candidate_index": 1,
+      "parameters": {
+        "alpha": 0.01,
+        "l1_ratio": 0.5,
+        "max_iter": 50000,
+        "tol": 1e-05
+      },
+      "validation_macro_mae_ft": 17.119751268792744
+    },
+    {
+      "model": "Huber",
+      "kind": "huber",
+      "candidate_index": 0,
+      "parameters": {
+        "alpha": 0.1,
+        "epsilon": 1.2,
+        "max_iter": 5000,
+        "tol": 1e-05
+      },
+      "validation_macro_mae_ft": 16.93533780506156
+    },
+    {
+      "model": "SVR RBF",
+      "kind": "svr",
+      "candidate_index": 3,
+      "parameters": {
+        "C": 100,
+        "cache_size": 200,
+        "epsilon": 5.0,
+        "gamma": 0.03,
+        "kernel": "rbf"
+      },
+      "validation_macro_mae_ft": 16.529234882552842
+    },
+    {
+      "model": "Random Forest",
+      "kind": "randomforest",
+      "candidate_index": 2,
+      "parameters": {
+        "max_depth": 6,
+        "min_samples_leaf": 5,
+        "n_estimators": 200,
+        "n_jobs": 1
+      },
+      "validation_macro_mae_ft": 22.916413745182993
+    },
+    {
+      "model": "Extra Trees",
+      "kind": "extratrees",
+      "candidate_index": 2,
+      "parameters": {
+        "max_depth": 6,
+        "min_samples_leaf": 5,
+        "n_estimators": 200,
+        "n_jobs": 1
+      },
+      "validation_macro_mae_ft": 23.124203128627716
+    },
+    {
+      "model": "Hist Gradient Boosting",
+      "kind": "histgb",
+      "candidate_index": 2,
+      "parameters": {
+        "early_stopping": false,
+        "l2_regularization": 1.0,
+        "learning_rate": 0.1,
+        "max_depth": 2,
+        "max_iter": 150,
+        "min_samples_leaf": 15
+      },
+      "validation_macro_mae_ft": 19.449599473886735
+    }
+  ],
+  "plan_sha256": "e0d7d9a584078a5aa215882dfdfdc6f3c8a5f5bd83593ef248cf8bc0da86670b",
+  "examples_sha256": "536c587c75bfb60369d76738a33ffcbd7392766647af3f7a4890793c764652d1"
+}

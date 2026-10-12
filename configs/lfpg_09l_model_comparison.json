@@ -1,0 +1,31 @@
+{
+  "study": "LFPG 09L model comparison 05",
+  "experiment_date": "2026-10-13",
+  "data_date": "2025-01-15",
+  "seed": 20250115,
+  "inherited_protocol": "configs/lfpg_09l_training.json",
+  "examples": "data/2025-01-15/training_04_examples.parquet",
+  "split": "reports/04_cohort_and_split.csv",
+  "features": ["height_ft", "vertical_rate_fps", "past_height_rate_fps", "speed_knots", "distance_m", "lateral_m", "heading_error_deg", "past_gap_s", "horizon_s"],
+  "target": "residual_ft",
+  "forecast": "baseline_ft + fitted residual",
+  "training_weights": "equal total weight per event, normalized to mean 1",
+  "selection_metric": "validation macro_mae_ft",
+  "selection_tie_break": "family then candidate_index",
+  "test_previously_inspected": true,
+  "interpretation": "exploratory comparison on reused test cohort",
+  "refit_on_validation": false,
+  "feature_selection": false,
+  "bootstrap_repetitions": 5000,
+  "sensitivity_delta_vertical_rate_fps": 1.0,
+  "baselines": ["Constant vertical rate", "Past height rate"],
+  "model_families": [
+    {"name": "Ridge", "kind": "ridge", "fixed": {"solver": "svd"}, "grid": {"alpha": [0.1, 1, 10, 100, 1000]}},
+    {"name": "ElasticNet", "kind": "elasticnet", "fixed": {"max_iter": 50000, "tol": 0.00001}, "grid": {"alpha": [0.01, 0.1, 1], "l1_ratio": [0.1, 0.5]}},
+    {"name": "Huber", "kind": "huber", "fixed": {"alpha": 0.1, "max_iter": 5000, "tol": 0.00001}, "grid": {"epsilon": [1.2, 1.5, 2.0]}},
+    {"name": "SVR RBF", "kind": "svr", "fixed": {"kernel": "rbf", "epsilon": 5.0, "cache_size": 200}, "grid": {"C": [10, 100, 1000], "gamma": ["scale", 0.03]}},
+    {"name": "Random Forest", "kind": "randomforest", "fixed": {"n_estimators": 200, "n_jobs": 1}, "grid": {"max_depth": [3, 6], "min_samples_leaf": [5, 15]}},
+    {"name": "Extra Trees", "kind": "extratrees", "fixed": {"n_estimators": 200, "n_jobs": 1}, "grid": {"max_depth": [3, 6], "min_samples_leaf": [5, 15]}},
+    {"name": "Hist Gradient Boosting", "kind": "histgb", "fixed": {"max_iter": 150, "min_samples_leaf": 15, "l2_regularization": 1.0, "early_stopping": false}, "grid": {"max_depth": [2, 3], "learning_rate": [0.05, 0.1]}}
+  ]
+}
