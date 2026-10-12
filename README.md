@@ -39,3 +39,9 @@
 [Выполненный эксперимент 05](airports/LFPG/notebooks/05_model_comparison.ipynb): 32 варианта в 7 семействах, прежние 37 кандидатов и разделение по бортам, два физических ориентира. Параметры выбираются на validation. SVR RBF выбрана по validation (16.53 ft), но на повторно используемом test Ridge дала меньшую macro MAE: 23.71 против 27.07 ft у SVR. Это исследовательское сравнение; независимого нового test здесь нет.
 
 [Таблица результатов и границы выводов](airports/LFPG/reports/05_model_comparison_result.md). Отдельно показана реакция прогноза на текущую Vz. Воспроизведение: `python scripts/build_lfpg_model_comparison_notebook.py`; проверка: `python scripts/verify_lfpg_model_comparison.py`.
+
+## Обучение на четырех днях
+
+[Выполненный эксперимент 06](airports/LFPG/notebooks/06_multiday_training.ipynb): 185 заходов LFPG 09L за 15–18.01.2025, 3259 примеров, 184 варианта обучения в 11 семействах. Проверены прогноз нового дня и перенос на новые борта, прямой прогноз и поправка к baseline, влияние второго обучающего дня и признаков.
+
+[Итоговая таблица](airports/LFPG/reports/06_final_table.csv): на 46 заходах нового дня Ridge дала MAE 17.52 ft против 55.97 ft у продолжения текущей Vz. Выбранная по validation полиномиальная Ridge получила 17.99 ft. Это прогноз барометрической высоты, а не классификация ухода. Воспроизведение: `python scripts/build_lfpg_multiday_notebook.py`; проверка: `python scripts/verify_lfpg_multiday.py`.

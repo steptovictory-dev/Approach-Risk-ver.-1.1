@@ -1,0 +1,45 @@
+scheme,model,family,mode,parameters,validation_mae_ft
+next_day,Ridge / residual,Ridge,residual,"{""solver"": ""svd"", ""alpha"": 1}",16.011382761970534
+next_day,Ridge / direct,Ridge,direct,"{""solver"": ""svd"", ""alpha"": 0.1}",16.730502714948788
+next_day,ElasticNet / residual,ElasticNet,residual,"{""max_iter"": 50000, ""tol"": 1e-05, ""alpha"": 0.01, ""l1_ratio"": 0.5}",17.357842361944748
+next_day,ElasticNet / direct,ElasticNet,direct,"{""max_iter"": 50000, ""tol"": 1e-05, ""alpha"": 0.01, ""l1_ratio"": 0.5}",17.6397029708031
+next_day,Huber / residual,Huber,residual,"{""alpha"": 0.1, ""max_iter"": 5000, ""tol"": 1e-05, ""epsilon"": 2.0}",16.520690169154093
+next_day,Huber / direct,Huber,direct,"{""alpha"": 0.1, ""max_iter"": 5000, ""tol"": 1e-05, ""epsilon"": 1.2}",16.738598309108344
+next_day,SVR RBF / residual,SVR RBF,residual,"{""kernel"": ""rbf"", ""epsilon"": 5.0, ""cache_size"": 200, ""C"": 1000, ""gamma"": 0.03}",16.31270665708487
+next_day,SVR RBF / direct,SVR RBF,direct,"{""kernel"": ""rbf"", ""epsilon"": 5.0, ""cache_size"": 200, ""C"": 1000, ""gamma"": 0.03}",18.60768186668885
+next_day,Random Forest / residual,Random Forest,residual,"{""n_estimators"": 200, ""n_jobs"": 1, ""max_depth"": 6, ""min_samples_leaf"": 5}",18.75797816822528
+next_day,Random Forest / direct,Random Forest,direct,"{""n_estimators"": 200, ""n_jobs"": 1, ""max_depth"": 6, ""min_samples_leaf"": 5}",27.674825518515277
+next_day,Extra Trees / residual,Extra Trees,residual,"{""n_estimators"": 200, ""n_jobs"": 1, ""max_depth"": 6, ""min_samples_leaf"": 5}",21.91932387948213
+next_day,Extra Trees / direct,Extra Trees,direct,"{""n_estimators"": 200, ""n_jobs"": 1, ""max_depth"": 6, ""min_samples_leaf"": 5}",32.21969050614188
+next_day,Hist Gradient Boosting / residual,Hist Gradient Boosting,residual,"{""max_iter"": 150, ""min_samples_leaf"": 15, ""l2_regularization"": 1.0, ""early_stopping"": false, ""learning_rate"": 0.05, ""max_depth"": 3}",18.13631066667175
+next_day,Hist Gradient Boosting / direct,Hist Gradient Boosting,direct,"{""max_iter"": 150, ""min_samples_leaf"": 15, ""l2_regularization"": 1.0, ""early_stopping"": false, ""learning_rate"": 0.1, ""max_depth"": 3}",21.172107679564615
+next_day,Gradient Boosting / residual,Gradient Boosting,residual,"{""n_estimators"": 200, ""min_samples_leaf"": 10, ""learning_rate"": 0.1, ""max_depth"": 3}",18.220521320917896
+next_day,Gradient Boosting / direct,Gradient Boosting,direct,"{""n_estimators"": 200, ""min_samples_leaf"": 10, ""learning_rate"": 0.1, ""max_depth"": 3}",21.03658362770183
+next_day,Polynomial Ridge / residual,Polynomial Ridge,residual,"{""alpha"": 1}",15.791784418797024
+next_day,Polynomial Ridge / direct,Polynomial Ridge,direct,"{""alpha"": 1}",16.463903943563405
+next_day,CatBoost / residual,CatBoost,residual,"{""iterations"": 400, ""loss_function"": ""RMSE"", ""l2_leaf_reg"": 3, ""verbose"": false, ""allow_writing_files"": false, ""thread_count"": 1, ""depth"": 3, ""learning_rate"": 0.1}",17.87682610868123
+next_day,CatBoost / direct,CatBoost,direct,"{""iterations"": 400, ""loss_function"": ""RMSE"", ""l2_leaf_reg"": 3, ""verbose"": false, ""allow_writing_files"": false, ""thread_count"": 1, ""depth"": 5, ""learning_rate"": 0.03}",19.942420774651406
+next_day,MLP / residual,MLP,residual,"{""solver"": ""lbfgs"", ""max_iter"": 3000, ""max_fun"": 100000, ""tol"": 1e-05, ""alpha"": 0.1, ""hidden_layer_sizes"": [32]}",18.97283917807468
+next_day,MLP / direct,MLP,direct,"{""solver"": ""lbfgs"", ""max_iter"": 3000, ""max_fun"": 100000, ""tol"": 1e-05, ""alpha"": 0.1, ""hidden_layer_sizes"": [32]}",17.68962548761017
+new_aircraft,Ridge / residual,Ridge,residual,"{""solver"": ""svd"", ""alpha"": 0.1}",16.053691303571508
+new_aircraft,Ridge / direct,Ridge,direct,"{""solver"": ""svd"", ""alpha"": 10}",15.79092734712852
+new_aircraft,ElasticNet / residual,ElasticNet,residual,"{""max_iter"": 50000, ""tol"": 1e-05, ""alpha"": 0.01, ""l1_ratio"": 0.5}",17.184703827659252
+new_aircraft,ElasticNet / direct,ElasticNet,direct,"{""max_iter"": 50000, ""tol"": 1e-05, ""alpha"": 0.01, ""l1_ratio"": 0.5}",15.788461730414955
+new_aircraft,Huber / residual,Huber,residual,"{""alpha"": 0.1, ""max_iter"": 5000, ""tol"": 1e-05, ""epsilon"": 2.0}",16.43961611286631
+new_aircraft,Huber / direct,Huber,direct,"{""alpha"": 0.1, ""max_iter"": 5000, ""tol"": 1e-05, ""epsilon"": 1.5}",15.773513186305461
+new_aircraft,SVR RBF / residual,SVR RBF,residual,"{""kernel"": ""rbf"", ""epsilon"": 5.0, ""cache_size"": 200, ""C"": 1000, ""gamma"": 0.03}",15.759109062413922
+new_aircraft,SVR RBF / direct,SVR RBF,direct,"{""kernel"": ""rbf"", ""epsilon"": 5.0, ""cache_size"": 200, ""C"": 1000, ""gamma"": 0.03}",16.97167620369577
+new_aircraft,Random Forest / residual,Random Forest,residual,"{""n_estimators"": 200, ""n_jobs"": 1, ""max_depth"": 6, ""min_samples_leaf"": 5}",19.700848403054724
+new_aircraft,Random Forest / direct,Random Forest,direct,"{""n_estimators"": 200, ""n_jobs"": 1, ""max_depth"": 6, ""min_samples_leaf"": 5}",25.96456536777459
+new_aircraft,Extra Trees / residual,Extra Trees,residual,"{""n_estimators"": 200, ""n_jobs"": 1, ""max_depth"": 6, ""min_samples_leaf"": 5}",23.4475974434671
+new_aircraft,Extra Trees / direct,Extra Trees,direct,"{""n_estimators"": 200, ""n_jobs"": 1, ""max_depth"": 6, ""min_samples_leaf"": 5}",29.924013660436458
+new_aircraft,Hist Gradient Boosting / residual,Hist Gradient Boosting,residual,"{""max_iter"": 150, ""min_samples_leaf"": 15, ""l2_regularization"": 1.0, ""early_stopping"": false, ""learning_rate"": 0.1, ""max_depth"": 3}",17.937377590684527
+new_aircraft,Hist Gradient Boosting / direct,Hist Gradient Boosting,direct,"{""max_iter"": 150, ""min_samples_leaf"": 15, ""l2_regularization"": 1.0, ""early_stopping"": false, ""learning_rate"": 0.1, ""max_depth"": 3}",17.42326085118945
+new_aircraft,Gradient Boosting / residual,Gradient Boosting,residual,"{""n_estimators"": 200, ""min_samples_leaf"": 10, ""learning_rate"": 0.1, ""max_depth"": 3}",17.825116101817734
+new_aircraft,Gradient Boosting / direct,Gradient Boosting,direct,"{""n_estimators"": 200, ""min_samples_leaf"": 10, ""learning_rate"": 0.1, ""max_depth"": 3}",17.523922790450627
+new_aircraft,Polynomial Ridge / residual,Polynomial Ridge,residual,"{""alpha"": 1}",15.547890671745671
+new_aircraft,Polynomial Ridge / direct,Polynomial Ridge,direct,"{""alpha"": 1}",15.41257873109048
+new_aircraft,CatBoost / residual,CatBoost,residual,"{""iterations"": 400, ""loss_function"": ""RMSE"", ""l2_leaf_reg"": 3, ""verbose"": false, ""allow_writing_files"": false, ""thread_count"": 1, ""depth"": 5, ""learning_rate"": 0.1}",16.97362620549161
+new_aircraft,CatBoost / direct,CatBoost,direct,"{""iterations"": 400, ""loss_function"": ""RMSE"", ""l2_leaf_reg"": 3, ""verbose"": false, ""allow_writing_files"": false, ""thread_count"": 1, ""depth"": 5, ""learning_rate"": 0.03}",17.319142783832007
+new_aircraft,MLP / residual,MLP,residual,"{""solver"": ""lbfgs"", ""max_iter"": 3000, ""max_fun"": 100000, ""tol"": 1e-05, ""alpha"": 0.1, ""hidden_layer_sizes"": [32]}",17.992822508469306
+new_aircraft,MLP / direct,MLP,direct,"{""solver"": ""lbfgs"", ""max_iter"": 3000, ""max_fun"": 100000, ""tol"": 1e-05, ""alpha"": 0.1, ""hidden_layer_sizes"": [32]}",15.989517304533857

@@ -5,6 +5,7 @@ nbformat
 nbclient
 ipykernel
 pyarrow
-scikit-learn
+scikit-learn>=1.7
 scipy
 joblib
+catboost>=1.2.10

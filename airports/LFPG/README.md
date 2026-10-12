@@ -51,3 +51,11 @@ notebooks/03_runway_and_final_segment_audit.ipynb использует исто�
 Test состоит из тех же 8 заходов, 7 бортов, ранее просмотренных в этапе 04. Сравнение исследовательское; для нового независимого подтверждения нужен другой день. Сохранены отдельные ошибки заходов, условные интервалы с повторным выбором целых бортов, локальная реакция на Vz, разбор трех заходов и [отчет](reports/05_model_comparison_result.md).
 
 Данные прогнозов – в игнорируемой data/2025-01-15/training_05_predictions.parquet, модели – в artifacts/training_05. Воспроизведение: `python scripts/build_lfpg_model_comparison_notebook.py`; проверка: `python scripts/verify_lfpg_model_comparison.py`.
+
+## Модели на нескольких днях
+
+[notebooks/06_multiday_training.ipynb](notebooks/06_multiday_training.ipynb) содержит выполненное сравнение 11 семейств на 185 заходах за 15–18.01.2025. В первом сравнении обучение идет на 15–16 января, выбор на 17 января, test на 18 января. Во втором все дни разделяются по ICAO24 без общих бортов между train, validation и test. Для каждого семейства проверены прямой прогноз и поправка к физическому baseline.
+
+[reports/06_final_table.csv](reports/06_final_table.csv) содержит ошибки нового дня и новых бортов. Дополнительно выполнены сравнение обучающих дней, перемешивание признаков на validation, диагностика реакции на Vz и разбор трех test-заходов. Сохранены 38088 прогнозов и модели в игнорируемой artifacts/training_06. Два несошедшихся варианта MLP исключены из выбора.
+
+Воспроизведение: `python scripts/build_lfpg_multiday_notebook.py`; проверка: `python scripts/verify_lfpg_multiday.py`.

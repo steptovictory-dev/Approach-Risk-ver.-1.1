@@ -1,0 +1,49 @@
+model,reference,delta_macro_mae_ft,interval_2_5_ft,interval_97_5_ft,independent_aircraft,events,repetitions,resampling_unit,scheme
+CatBoost / direct,Constant vertical rate,-32.58646412404494,-40.559262465932655,-25.5994830673244,45,46,5000,icao24,next_day
+CatBoost / residual,Constant vertical rate,-29.766855226826692,-36.879533581512476,-23.567070935926804,45,46,5000,icao24,next_day
+Constant vertical rate,Constant vertical rate,0.0,0.0,0.0,45,46,5000,icao24,next_day
+ElasticNet / direct,Constant vertical rate,-35.814357169630604,-42.89314572465157,-29.790567777116635,45,46,5000,icao24,next_day
+ElasticNet / residual,Constant vertical rate,-35.861630273327954,-42.67284334723883,-30.151900366569095,45,46,5000,icao24,next_day
+Extra Trees / direct,Constant vertical rate,-27.13822326850323,-35.71267310444826,-19.585532107928117,45,46,5000,icao24,next_day
+Extra Trees / residual,Constant vertical rate,-26.35668823277561,-32.166877671161835,-21.161123501829277,45,46,5000,icao24,next_day
+Gradient Boosting / direct,Constant vertical rate,-32.566294691336445,-40.75315027187715,-25.54282374229823,45,46,5000,icao24,next_day
+Gradient Boosting / residual,Constant vertical rate,-29.556876151602193,-36.540164813480516,-23.377046213436085,45,46,5000,icao24,next_day
+Hist Gradient Boosting / direct,Constant vertical rate,-31.964755487570606,-40.10736523503387,-24.961272145725182,45,46,5000,icao24,next_day
+Hist Gradient Boosting / residual,Constant vertical rate,-28.864162088133995,-35.486823030178996,-22.883193876454886,45,46,5000,icao24,next_day
+Huber / direct,Constant vertical rate,-36.837726456919206,-43.762029169536696,-30.972580774375924,45,46,5000,icao24,next_day
+Huber / residual,Constant vertical rate,-37.646387039995716,-44.308845095676645,-32.048436871160874,45,46,5000,icao24,next_day
+MLP / direct,Constant vertical rate,-34.882099964724475,-41.80375027506741,-28.893574202106283,45,46,5000,icao24,next_day
+MLP / residual,Constant vertical rate,-34.46236690783534,-41.639334512878456,-28.34633054291075,45,46,5000,icao24,next_day
+Past height rate,Constant vertical rate,10.472042999121769,6.780550360430558,14.307877113578614,45,46,5000,icao24,next_day
+Polynomial Ridge / direct,Constant vertical rate,-36.20748660728954,-43.09710316331119,-30.44671138856536,45,46,5000,icao24,next_day
+Polynomial Ridge / residual,Constant vertical rate,-37.987461791426874,-44.55371221491843,-32.23167587391284,45,46,5000,icao24,next_day
+Random Forest / direct,Constant vertical rate,-28.374152948567218,-36.25000466287574,-21.41102328268462,45,46,5000,icao24,next_day
+Random Forest / residual,Constant vertical rate,-27.32563049243825,-34.16011971646987,-21.315886696069597,45,46,5000,icao24,next_day
+Ridge / direct,Constant vertical rate,-36.44004715086565,-43.29687105501456,-30.639527035916096,45,46,5000,icao24,next_day
+Ridge / residual,Constant vertical rate,-38.45004713600176,-45.091784165859124,-32.78835015146717,45,46,5000,icao24,next_day
+SVR RBF / direct,Constant vertical rate,-33.14023428251767,-40.263904506099784,-27.130797083358168,45,46,5000,icao24,next_day
+SVR RBF / residual,Constant vertical rate,-36.82654185320523,-43.49325508613759,-31.188153895260676,45,46,5000,icao24,next_day
+CatBoost / direct,Constant vertical rate,-24.79687824149416,-31.14815529011235,-18.51392690353916,33,40,5000,icao24,new_aircraft
+CatBoost / residual,Constant vertical rate,-26.70906380336303,-32.64870563584143,-21.01083270111663,33,40,5000,icao24,new_aircraft
+Constant vertical rate,Constant vertical rate,0.0,0.0,0.0,33,40,5000,icao24,new_aircraft
+ElasticNet / direct,Constant vertical rate,-27.394546499953343,-33.863066229482335,-21.213142836412334,33,40,5000,icao24,new_aircraft
+ElasticNet / residual,Constant vertical rate,-27.002918511539765,-32.83803832061689,-21.461242037170933,33,40,5000,icao24,new_aircraft
+Extra Trees / direct,Constant vertical rate,-15.377800029584495,-22.36592278894771,-8.457925488929932,33,40,5000,icao24,new_aircraft
+Extra Trees / residual,Constant vertical rate,-21.136174543398557,-26.172233687867266,-16.451725005905075,33,40,5000,icao24,new_aircraft
+Gradient Boosting / direct,Constant vertical rate,-25.317037813845822,-31.244944675343056,-19.425246813704327,33,40,5000,icao24,new_aircraft
+Gradient Boosting / residual,Constant vertical rate,-26.136821046694116,-31.850031102346062,-20.65119107273187,33,40,5000,icao24,new_aircraft
+Hist Gradient Boosting / direct,Constant vertical rate,-25.331321510601278,-31.19553878867326,-19.46508351394581,33,40,5000,icao24,new_aircraft
+Hist Gradient Boosting / residual,Constant vertical rate,-25.989240385282688,-31.732524001285682,-20.540265563890145,33,40,5000,icao24,new_aircraft
+Huber / direct,Constant vertical rate,-27.65371390209093,-34.113589870002215,-21.558125107004493,33,40,5000,icao24,new_aircraft
+Huber / residual,Constant vertical rate,-27.760894483141907,-33.79830709630811,-22.049214737039325,33,40,5000,icao24,new_aircraft
+MLP / direct,Constant vertical rate,-26.344356440307962,-32.41762290739103,-20.4261294201837,33,40,5000,icao24,new_aircraft
+MLP / residual,Constant vertical rate,-24.964529706127657,-31.004134788257858,-19.164093621929904,33,40,5000,icao24,new_aircraft
+Past height rate,Constant vertical rate,13.944422275535857,8.056484917501592,19.18903669662092,33,40,5000,icao24,new_aircraft
+Polynomial Ridge / direct,Constant vertical rate,-27.681295108766527,-34.10294174561025,-21.452547457614255,33,40,5000,icao24,new_aircraft
+Polynomial Ridge / residual,Constant vertical rate,-27.79339458017746,-33.99993186501114,-21.777145991052038,33,40,5000,icao24,new_aircraft
+Random Forest / direct,Constant vertical rate,-18.576679465208894,-24.992161995035985,-12.28930048239941,33,40,5000,icao24,new_aircraft
+Random Forest / residual,Constant vertical rate,-24.35926732132715,-30.13696010283138,-18.850463022515708,33,40,5000,icao24,new_aircraft
+Ridge / direct,Constant vertical rate,-27.384563276682787,-33.85162912067155,-21.199439190525776,33,40,5000,icao24,new_aircraft
+Ridge / residual,Constant vertical rate,-27.730367018273512,-34.03327246272724,-21.78166282837599,33,40,5000,icao24,new_aircraft
+SVR RBF / direct,Constant vertical rate,-25.985141359071555,-31.173252325170395,-20.850144417989164,33,40,5000,icao24,new_aircraft
+SVR RBF / residual,Constant vertical rate,-27.327269245204178,-33.0122721581234,-21.78327417450784,33,40,5000,icao24,new_aircraft
