@@ -31,22 +31,27 @@ import matplotlib.pyplot as plt
 from IPython.display import display
 
 ROOT = Path.cwd()
+# Определяем папку аэропорта независимо от запуска из notebooks
 if ROOT.name == 'notebooks':
     ROOT = ROOT.parent
 PROJECT = ROOT.parents[1]
 assert (PROJECT / 'configs/sources.json').is_file()
 for name in ['reports', 'figures']:
     (ROOT / name).mkdir(exist_ok=True)
-RED = '#D65A4A'  # Красный: коралловый цвет.
+# Сохраняем палитру первой версии для сопоставимости рисунков
+RED = '#D65A4A'  # Красный: коралловый цвет
 GREEN = '#00897B'
 plt.rcParams.update({'axes.prop_cycle': plt.cycler(color=[RED, GREEN]),
                      'figure.dpi': 130, 'axes.spines.top': False,
                      'axes.spines.right': False, 'font.size': 11})
+# Читаем сохраненную сводку без изменения исходных данных
 config = json.loads((PROJECT / 'configs/sources.json').read_text(encoding='utf-8'))
 source = (PROJECT / config['airport_summary']).resolve()
 summary = pd.read_csv(source)
+# Порядок строк соответствует последовательности исследования аэропортов
 selected = summary.set_index('airport').loc[['LFPG', 'EGLL']].reset_index()
 selected.to_csv(ROOT / 'reports/00_airport_summary.csv', index=False)
+# Хеш фиксирует точную версию исходника для воспроизведения
 provenance = {'source': config['airport_summary'],
               'sha256': hashlib.sha256(source.read_bytes()).hexdigest(),
               'role': config['source_role'], 'python': platform.python_version(),
@@ -58,7 +63,8 @@ display(selected.rename(columns={'airport': 'Аэропорт', 'rows': 'Зап�
 md('''## Объем исходной таблицы
 
 Сводка перенесена из сохраненного отчета версии 1.0 с фиксацией хеша. Это агрегаты строк и меток источника, а не независимо подтвержденные уходы и не число полных траекторий. График показывает запас исходных записей для последующего отбора; он не измеряет качество данных.''')
-code('''fig, axes = plt.subplots(1, 2, figsize=(11, 4))
+code('''# Показываем объем записей и меток отдельно от качества траекторий
+fig, axes = plt.subplots(1, 2, figsize=(11, 4))
 for ax, field, title in zip(axes, ['rows', 'go_arounds'],
                            ['Записи исходной таблицы', 'Метки GoA источника']):
     values = selected[field].tolist()
@@ -69,6 +75,7 @@ for ax, field, title in zip(axes, ['rows', 'go_arounds'],
     ax.ticklabel_format(axis='y', style='plain')
 fig.suptitle('LFPG: первый этап; EGLL: последующая проверка')
 fig.tight_layout()
+# Сохраняем растровую и векторную версии для отчетов
 fig.savefig(ROOT / 'figures/00_airport_volume.png', bbox_inches='tight')
 fig.savefig(ROOT / 'figures/00_airport_volume.svg', bbox_inches='tight')
 plt.show()''')
@@ -90,7 +97,8 @@ md('''## Постановка и границы метода
 md('''## Протокол проверки пригодности данных
 
 До выбора ВПП необходимо проверить следующие свойства. Отсутствие сведений обозначается как неизвестность, а не как положительный результат.''')
-code('''criteria = pd.DataFrame([
+code('''# Фиксируем критерии до анализа траекторий и выбора направления ВПП
+criteria = pd.DataFrame([
     ['Траектории', 'Есть временные ряды конечного участка посадок и уходов'],
     ['ВПП', 'Направление определено с оценкой неоднозначных случаев'],
     ['Время', 'Определены UTC, частота, пропуски и порядок наблюдений'],
@@ -100,6 +108,7 @@ code('''criteria = pd.DataFrame([
     ['Доступность', 'Оценены задержки; будущие точки не входят в признаки'],
     ['Отбор', 'Описаны потери посадок и GoA по каждому критерию'],
 ], columns=['Область', 'Проверка'])
+# Наличие агрегатов не подтверждает выполнение критериев пригодности
 criteria['Статус'] = 'Не проверено'
 criteria.to_csv(ROOT / 'reports/00_data_readiness.csv', index=False)
 display(criteria)''')
@@ -121,7 +130,7 @@ airport_root = ROOT / 'airports/LFPG'
 (airport_root / 'notebooks').mkdir(parents=True, exist_ok=True)
 path = airport_root / 'notebooks/00_research_protocol.ipynb'
 nbf.write(nb, path)
-# Исполнение в текущем процессе сохраняет доступное окружение Python.
+# Исполнение в текущем процессе сохраняет доступное окружение Python
 os.chdir(airport_root)
 namespace = {'__name__': '__main__'}
 count = 0
@@ -131,11 +140,13 @@ for cell in nb.cells:
     count += 1
     cell.execution_count = count
     outputs = []
+    # Сохраняем таблицы в выводах ноутбука вместе с кодом расчета
     def capture_display(value):
         data = {'text/plain': repr(value)}
         if hasattr(value, '_repr_html_'):
             data['text/html'] = value._repr_html_()
         outputs.append(nbf.v4.new_output('display_data', data=data))
+    # Встраиваем рисунок в ноутбук для просмотра без повторного запуска
     def capture_show():
         import matplotlib.pyplot as plt
         buffer = io.BytesIO()
