@@ -1,0 +1,29 @@
+{
+  "date": "2025-01-15",
+  "archives": [
+    {
+      "path": "data/raw/usa/2025-01-15/v2025.01.15-planes-readsb-prod-0.tar.aa",
+      "bytes": 2000000000,
+      "sha256": "ac18b2989b6131a036bdf8c8f4a08a2ddc521fe71642a48736c8ff0a5f30a6aa",
+      "url": "https://github.com/adsblol/globe_history_2025/releases/download/v2025.01.15-planes-readsb-prod-0/v2025.01.15-planes-readsb-prod-0.tar.aa"
+    },
+    {
+      "path": "data/raw/usa/2025-01-15/v2025.01.15-planes-readsb-prod-0.tar.ab",
+      "bytes": 233630720,
+      "sha256": "b9bcfa26de788f873a39e48d03d61e0a948628f11b5a789128948fc76437057d",
+      "url": "https://github.com/adsblol/globe_history_2025/releases/download/v2025.01.15-planes-readsb-prod-0/v2025.01.15-planes-readsb-prod-0.tar.ab"
+    }
+  ],
+  "derived_sha256": {
+    "region_points.parquet": "db4438a1ee334a498c396a70d3427a8caeaa00c2e806fa19300bab2aca3be9f2",
+    "candidate_traces.csv": "e33af82d3e5bd07f3af600eec43cf27504d3ffc7413d1c69879a5047ac7f14ba"
+  },
+  "bbox": [
+    48.7,
+    49.3,
+    2.0,
+    3.0
+  ],
+  "candidate_max_altitude_ft": 10000,
+  "full_traces_checked": 59714
+}

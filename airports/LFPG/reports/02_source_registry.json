@@ -1,0 +1,47 @@
+{
+  "checked_on": "2026-10-12",
+  "sources": [
+    {
+      "name": "Zenodo 10210178",
+      "url": "https://zenodo.org/records/10210178",
+      "role": "Реестр полетов и меток 2019–2023",
+      "trajectory_fields": false,
+      "access": "Открытый Parquet; уже сохранен локально",
+      "limitation": "Метаданные не содержат полного временного ряда"
+    },
+    {
+      "name": "OSN23-GoA",
+      "url": "https://github.com/figuetbe/OSN23-GoA",
+      "role": "Код и описание исследования авторов",
+      "trajectory_fields": false,
+      "access": "Открытый репозиторий",
+      "limitation": "README прямо указывает отсутствие исходных траекторий"
+    },
+    {
+      "name": "OpenSky Trino",
+      "url": "https://openskynetwork.github.io/opensky-api/trino.html",
+      "role": "Исторические state vectors для связи со старыми метками",
+      "trajectory_fields": true,
+      "access": "Заявка и одобрение; одобренного доступа сейчас нет",
+      "limitation": "Доступ ограничен категориями заявителей; всегда нужен фильтр hour"
+    },
+    {
+      "name": "OpenSky REST tracks",
+      "url": "https://openskynetwork.github.io/opensky-api/rest.html",
+      "role": "Недавние треки",
+      "trajectory_fields": true,
+      "access": "Публичная документация API",
+      "limitation": "История tracks не глубже 30 дней; не подходит для полетов 2019–2023"
+    },
+    {
+      "name": "ADSB.lol 2025",
+      "url": "https://github.com/adsblol/globe_history_2025",
+      "role": "Открытые глобальные суточные траектории; пилот 15.01.2025",
+      "trajectory_fields": true,
+      "access": "Открытый архив ODbL-1.0; выбранный день уже сохранен локально",
+      "limitation": "Новый период; метки GoA необходимо определить и проверить отдельно"
+    }
+  ],
+  "format_reference": "https://github.com/wiedehopf/readsb/blob/dev/README-json.md",
+  "decision": "Проверить локальный архив ADSB.lol 15.01.2025 на малые высоты около LFPG без новой загрузки; не переносить старые метки"
+}

@@ -1,0 +1,13 @@
+{
+  "rows": 109116,
+  "traces": 670,
+  "duplicate_trace_time_rows": 0,
+  "stale_position_rows": 4647,
+  "geometric_altitude_rows": 0,
+  "ground_rows": 0,
+  "median_positive_gap_s": 3.7100000381469727,
+  "p95_positive_gap_s": 16.66000008583069,
+  "max_positive_gap_s": 78835.11999988556,
+  "airport_assignment_verified": false,
+  "goaround_labels_created": false
+}
