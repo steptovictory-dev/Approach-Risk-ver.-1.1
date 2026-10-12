@@ -1,0 +1,96 @@
+"""Выполнить представление результатов простых сезонных моделей"""
+from pathlib import Path
+import sys
+import nbformat as nbf
+
+BASE = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(BASE.parents[1] / 'scripts'))
+from execute_notebook import execute
+sys.stdout.reconfigure(encoding='utf-8')
+cells = [nbf.v4.new_markdown_cell(
+    '# Простые модели и сезонное обучение\n\n'
+    'LFPG 09L, погожие дни 2025 года. Ridge, Huber, ElasticNet и Polynomial Ridge '
+    'учат поправку к прогнозу с постоянной вертикальной скоростью. '
+    'Горизонт 30 ± 3 секунды, девять прежних причинных признаков, наблюдения до '
+    'барометрического прокси 300 ft. Меток ухода на второй круг здесь нет.\n\n'
+    'Последние два выбранных дня каждого сезона оставлены для теста, предыдущий '
+    'для валидации, остальные для обучения. Идентификатор борта не является признаком; '
+    'борта могут повторяться между днями. Параметры выбираются по валидации. '
+    'Каждый заход имеет одинаковый суммарный обучающий вес')]
+cells.append(nbf.v4.new_code_cell('''from pathlib import Path
+import pandas as pd
+import matplotlib.pyplot as plt
+from matplotlib.colors import LinearSegmentedColormap
+from IPython.display import display
+
+base = Path.cwd()
+days = pd.read_csv(base / 'reports/selected_days.csv')
+metrics = pd.read_csv(base / 'reports/model_metrics.csv')
+learning = pd.read_csv(base / 'reports/learning_curve.csv')
+table = pd.read_csv(base / 'reports/final_table.csv', index_col=0)
+seasons = ['winter', 'spring', 'summer', 'autumn']
+labels = ['Зима', 'Весна', 'Лето', 'Осень']
+plt.rcParams.update({'font.family': 'DejaVu Sans', 'font.size': 11,
+                     'axes.spines.top': False, 'axes.spines.right': False})
+display(days.groupby(['season', 'split']).agg(Дней=('day', 'size'),
+             Заходов=('approaches', 'sum'), Пар=('examples', 'sum')))
+'''))
+cells.append(nbf.v4.new_markdown_cell(
+    '## Итоговая таблица\n\n'
+    'Обучение на всех доступных обучающих днях четырех сезонов. '
+    'Ошибка MAE усредняется сначала внутри каждого захода, затем между заходами; '
+    'единица измерения ft. Проверочные дни одинаковы для всех моделей'))
+cells.append(nbf.v4.new_code_cell('''shown = table.rename(columns=dict(zip(seasons + ['all'], labels + ['Все сезоны'])))
+display(shown.style.format('{:.2f}').highlight_min(axis=0, color='#DDEFE8'))
+'''))
+cells.append(nbf.v4.new_markdown_cell(
+    '## Влияние числа дней\n\n'
+    'Ridge и Polynomial Ridge используют одни и те же проверочные дни при изменении '
+    'обучающей выборки. Первый вариант берет одинаковое число заходов каждого включенного дня. '
+    'Во втором тот же бюджет распределен между днями: это контроль разнообразия '
+    'при одинаковом числе заходов. Кривые усреднены по трем вложенным наборам дней; '
+    'диапазон показывает их минимум и максимум, а не доверительный интервал. '
+    'Параметры фиксируются после выбора по валидации полного обучающего набора сезона'))
+cells.append(nbf.v4.new_code_cell('''budget = int(learning.sample_per_day.iloc[0])
+for mode, title in [('more_approaches', f'По {budget} заходов каждого дня'),
+                    ('same_approaches', f'Всего {budget} заходов на все обучающие дни')]:
+    fig, axes = plt.subplots(2, 2, figsize=(11, 7), sharey=True)
+    for ax, season, label in zip(axes.flat, seasons, labels):
+        subset = learning.loc[learning.season.eq(season) & learning['mode'].eq(mode) & learning.converged]
+        for model, color in [('Ridge', '#00897B'), ('Polynomial Ridge', '#D65A4A')]:
+            values = subset.loc[subset.model.eq(model)].groupby('train_days').macro_mae_ft.agg(['mean', 'min', 'max'])
+            ax.plot(values.index, values['mean'], marker='o', color=color, label=model)
+            ax.fill_between(values.index, values['min'], values['max'], color=color, alpha=.12)
+        ax.set(title=label, xlabel='Обучающих дней', ylabel='MAE, ft')
+        ax.grid(axis='y', alpha=.15)
+    axes[0, 0].legend(frameon=False)
+    fig.suptitle(title)
+    fig.tight_layout()
+    fig.savefig(base / f'figures/02_{mode}.png', dpi=180, bbox_inches='tight')
+    plt.show()
+'''))
+cells.append(nbf.v4.new_markdown_cell(
+    '## Перенос между сезонами\n\n'
+    'Для Ridge показана ошибка при обучении в одном сезоне и проверке на отложенных '
+    'днях всех сезонов. Параметры выбирались только по валидации обучающего сезона. '
+    'Это сравнение переноса между сезонными группами на отложенных днях'))
+cells.append(nbf.v4.new_code_cell('''transfer = metrics.loc[metrics.model.eq('Ridge') & metrics.source.isin(seasons)
+                       & metrics.target.isin(seasons)].pivot(index='source', columns='target', values='macro_mae_ft')
+transfer = transfer.reindex(index=seasons, columns=seasons)
+fig, ax = plt.subplots(figsize=(7, 5.5))
+cmap = LinearSegmentedColormap.from_list('seasonal', ['#00897B', '#F4F7F6', '#D65A4A'])
+image = ax.imshow(transfer.to_numpy(), cmap=cmap)
+ax.set(xticks=range(4), xticklabels=labels, yticks=range(4), yticklabels=labels,
+       xlabel='Сезон проверки', ylabel='Сезон обучения', title='Ridge: перенос между сезонами')
+for row in range(4):
+    for column in range(4):
+        ax.text(column, row, f'{transfer.iloc[row, column]:.1f}', ha='center', va='center', color='#25343B')
+fig.colorbar(image, ax=ax, label='MAE, ft')
+fig.tight_layout()
+fig.savefig(base / 'figures/02_transfer.png', dpi=180, bbox_inches='tight')
+plt.show()
+'''))
+notebook = nbf.v4.new_notebook(cells=cells, metadata={
+    'kernelspec': {'display_name': 'Python 3', 'language': 'python', 'name': 'python3'}})
+execute(notebook, BASE / 'notebooks/02_seasonal_training.ipynb', BASE)
+print('Сезонный ноутбук обучения выполнен')

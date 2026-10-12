@@ -1,0 +1,13 @@
+model,parameters,validation_mae_ft,converged
+Ridge,"{""alpha"": 1}",19.069771701347698,True
+Ridge,"{""alpha"": 10}",19.067778759159438,True
+Ridge,"{""alpha"": 100}",20.169658206497115,True
+Polynomial Ridge,"{""alpha"": 1}",18.926964316378243,True
+Polynomial Ridge,"{""alpha"": 10}",19.56576063528315,True
+Polynomial Ridge,"{""alpha"": 100}",20.255005878945976,True
+Huber,"{""epsilon"": 1.2, ""alpha"": 0.01, ""max_iter"": 3000}",19.216675784334083,True
+Huber,"{""epsilon"": 1.35, ""alpha"": 0.01, ""max_iter"": 3000}",19.221346202992887,True
+Huber,"{""epsilon"": 1.5, ""alpha"": 0.01, ""max_iter"": 3000}",19.24065959887438,True
+ElasticNet,"{""alpha"": 0.001, ""l1_ratio"": 0.1, ""max_iter"": 20000}",18.778660280742375,True
+ElasticNet,"{""alpha"": 0.01, ""l1_ratio"": 0.1, ""max_iter"": 20000}",19.554723064486524,True
+ElasticNet,"{""alpha"": 0.1, ""l1_ratio"": 0.1, ""max_iter"": 20000}",21.371704503213724,True

@@ -1,6 +1,7 @@
 """Проверить погожие дни по фактическим заходам LFPG 09L"""
 from pathlib import Path
 from concurrent.futures import ThreadPoolExecutor
+import argparse
 import hashlib
 import json
 import sys
@@ -90,12 +91,18 @@ def analyze(date):
         output / 'selected_09l_points.parquet', index=False)
     arrivals = events.loc[events.direction.eq('arrival')]
     result = {'date': date, 'arrivals_by_runway': arrivals.runway.value_counts().to_dict(),
-              'eligible_09l': len(selected), 'enough_approaches': len(selected) >= 30}
+              'eligible_09l': len(selected), 'enough_approaches': len(selected) >= 20}
+    (output / 'day_result.json').write_text(json.dumps(result, indent=2), encoding='utf-8')
     print('DAY_RESULT', json.dumps(result), flush=True)
     return result
 
 
 if __name__ == '__main__':
     sys.stdout.reconfigure(encoding='utf-8')
-    for date in sys.argv[1:]:
-        analyze(date)
+    parser = argparse.ArgumentParser()
+    parser.add_argument('dates', nargs='+')
+    parser.add_argument('--workers', type=int, default=1, choices=[1, 2, 3])
+    arguments = parser.parse_args()
+    with ThreadPoolExecutor(max_workers=arguments.workers) as pool:
+        results = list(pool.map(analyze, arguments.dates))
+    print('CHECKED_DAYS', json.dumps(results), flush=True)
