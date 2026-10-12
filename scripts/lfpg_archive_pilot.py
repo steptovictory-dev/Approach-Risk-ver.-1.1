@@ -30,14 +30,18 @@ class Parts(io.RawIOBase):
             stream.close()
         super().close()
 
-def scan(old_root, base, date='2025-01-15'):
+def scan(old_root, base, date='2025-01-15', manifest_entries=None):
     output = base / 'data' / date
     raw = output / 'raw_candidates'
     raw.mkdir(parents=True, exist_ok=True)
     manifest_path = old_root / 'docs/sources/download_manifest.json'
-    original = json.loads(manifest_path.read_text(encoding='utf-8'))
-    entries = [item for item in original['files'] if f'usa/{date}/' in item['path']]
-    assert len(entries) == 2
+    if manifest_entries is None:
+        original = json.loads(manifest_path.read_text(encoding='utf-8'))
+        entries = [item for item in original['files'] if f'usa/{date}/' in item['path']]
+        assert len(entries) == 2
+    else:
+        entries = manifest_entries
+        assert entries
     paths = [old_root / item['path'] for item in entries]
     verified = []
     for path, item in zip(paths, entries):

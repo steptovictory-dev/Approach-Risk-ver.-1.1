@@ -1,4 +1,4 @@
-"""Найти погожие дневные интервалы LFPG в запрошенных и зимних месяцах"""
+"""Найти погожие дневные интервалы LFPG за все сезоны года"""
 from pathlib import Path
 from concurrent.futures import ThreadPoolExecutor
 import sys
@@ -13,7 +13,9 @@ DATA=BASE/'data'
 DATA.mkdir(exist_ok=True)
 sys.stdout.reconfigure(encoding='utf-8')
 YEAR=int(sys.argv[1]) if len(sys.argv)>1 else 2025
-MONTHS=[1,2,3,7,10,12]
+MONTHS=list(range(1,13))
+SEASONS={12:'winter',1:'winter',2:'winter',3:'spring',4:'spring',5:'spring',
+         6:'summer',7:'summer',8:'summer',9:'autumn',10:'autumn',11:'autumn'}
 
 def fetch_month(month):
     path=DATA/f'metar_{YEAR}_{month:02}.csv'
@@ -62,7 +64,7 @@ def fetch_month(month):
         join=pd.merge_asof(clock,parsed.rename(columns={'utc':'observed'}),left_on='utc',right_on='observed',direction='backward',tolerance=pd.Timedelta(minutes=60))
         good=join.fair.fillna(False).astype(bool)
         east=join.direction.between(30,150)
-        summaries.append({'date':day.strftime('%Y-%m-%d'),'month':month,'fair_fraction':good.mean(),
+        summaries.append({'date':day.strftime('%Y-%m-%d'),'month':month,'season':SEASONS[month],'fair_fraction':good.mean(),
             'east_fair_fraction':(east & good).mean(),'wind_max_kt':join.loc[good,'wind'].max(),
             'temperature_min_c':join.loc[good,'temperature_c'].min(),
             'temperature_max_c':join.loc[good,'temperature_c'].max()})
@@ -75,3 +77,4 @@ candidates=pd.concat(outputs,ignore_index=True)
 candidates.to_csv(DATA/f'weather_candidates_{YEAR}.csv',index=False)
 print(candidates.to_string(index=False),flush=True)
 print('Кандидатов по месяцам:',candidates.groupby('month').size().to_dict(),flush=True)
+print('Кандидатов по сезонам:',candidates.groupby('season').size().to_dict(),flush=True)
