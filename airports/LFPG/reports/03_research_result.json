@@ -1,0 +1,15 @@
+{
+  "date": "2025-01-15",
+  "geometry_reference": "121faf552580e224617e23867e491f8b5b7bc0f9",
+  "airport_elevation_ft": 392.0,
+  "arrival_assignments": 54,
+  "departure_assignments": 38,
+  "coverage300_candidates": 12,
+  "suggested_runway_for_pilot": "09L",
+  "official_historical_validity_verified": false,
+  "actual_received_at_known": false,
+  "glideslope_capture_verified": false,
+  "true_height_verified": false,
+  "goaround_labels_created": false,
+  "interpretation": "Геометрические кандидаты и покрытие барометрического прокси; не подтвержденные эксплуатационные события"
+}

@@ -1,0 +1,40 @@
+{
+  "checked_on": "2026-10-12",
+  "ourairports_reference": "121faf552580e224617e23867e491f8b5b7bc0f9",
+  "ourairports_commit_date": "2025-01-14T03:53:35.000-05:00",
+  "historical_commit_found": true,
+  "official_historical_validity_verified": false,
+  "records": [
+    {
+      "url": "https://www.sia.aviation-civile.gouv.fr/media/dvd/eAIP_26_DEC_2024/FRANCE/AIRAC-2024-12-26/html/eAIP/FR-AD-2.LFPG-fr-FR.html",
+      "file": "sia_2024-12-26_media_dvd.html",
+      "status": "HTTP Error 404: Not Found"
+    },
+    {
+      "url": "https://www.sia.aviation-civile.gouv.fr/dvd/eAIP_26_DEC_2024/FRANCE/AIRAC-2024-12-26/html/eAIP/FR-AD-2.LFPG-fr-FR.html",
+      "file": "sia_2024-12-26_dvd.html",
+      "status": "HTTP Error 404: Not Found"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/davidmegginson/ourairports-data/121faf552580e224617e23867e491f8b5b7bc0f9/runways.csv",
+      "file": "runways.csv",
+      "status": 200,
+      "bytes": 3951073,
+      "sha256": "e91cd1500ba94db8ef2bd4a2db5a52efe7550315256000845891177e687c9438"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/davidmegginson/ourairports-data/121faf552580e224617e23867e491f8b5b7bc0f9/airports.csv",
+      "file": "airports.csv",
+      "status": 200,
+      "bytes": 11966173,
+      "sha256": "2055a1b1dd191e4b70f1ff909b4075700fae2fdbdf6e01ad16610304afb242ad"
+    },
+    {
+      "url": "https://mesonet.agron.iastate.edu/cgi-bin/request/asos.py?station=LFPG&data=metar&year1=2025&month1=1&day1=14&year2=2025&month2=1&day2=16&tz=Etc%2FUTC&format=onlycomma&latlon=no&elev=no&missing=M&trace=T&direct=no&report_type=3&report_type=4",
+      "file": "lfpg_metar_2025-01-14_16.csv",
+      "status": 200,
+      "bytes": 11121,
+      "sha256": "7aa822fe5a7f39cb37d2b83206336d949c360c32d0d10190eb1948db85799b3e"
+    }
+  ]
+}
