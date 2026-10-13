@@ -12,6 +12,7 @@ import pandas as pd
 from sklearn.model_selection import ParameterGrid
 from threadpoolctl import threadpool_limits
 from lfpg_training import summarize
+from checksums import matches_sha256
 from lfpg_model_comparison import forecast
 
 PROJECT = Path(__file__).resolve().parents[1]
@@ -32,10 +33,10 @@ def digest(path):
 
 for key, path in {'examples': BASE / plan['examples'], 'cohort': BASE / plan['split'],
                   'prior_manifest': REPORTS / '04_training_manifest.json', 'plan': plan_path}.items():
-    assert digest(path) == manifest['input_sha256'][key]
+    assert matches_sha256(path, manifest['input_sha256'][key])
 for relative, expected in manifest['implementation_sha256'].items():
-    assert digest(PROJECT / relative) == expected
-assert digest(selection_path) == manifest['selection_sha256']
+    assert matches_sha256(PROJECT / relative, expected)
+assert matches_sha256(selection_path, manifest['selection_sha256'])
 model_path = BASE / 'artifacts/training_05/selected_models.joblib'
 prediction_path = BASE / 'data/2025-01-15/training_05_predictions.parquet'
 assert digest(model_path) == manifest['model_sha256']

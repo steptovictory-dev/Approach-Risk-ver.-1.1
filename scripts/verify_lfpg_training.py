@@ -10,6 +10,7 @@ import nbformat
 import numpy as np
 import pandas as pd
 from lfpg_training import summarize
+from checksums import matches_sha256
 
 PROJECT = Path(__file__).resolve().parents[1]
 BASE = PROJECT / 'airports/LFPG'
@@ -23,11 +24,11 @@ def digest(path):
         return hashlib.file_digest(stream, 'sha256').hexdigest()
 
 
-assert digest(PROJECT / 'configs/lfpg_09l_training.json') == manifest['protocol_sha256']
+assert matches_sha256(PROJECT / 'configs/lfpg_09l_training.json', manifest['protocol_sha256'])
 for relative, expected in manifest['inputs_sha256'].items():
-    assert digest(BASE / relative) == expected == protocol['inputs_sha256'][relative]
+    assert matches_sha256(BASE / relative, expected) and expected == protocol['inputs_sha256'][relative]
 for relative, expected in manifest['implementation_sha256'].items():
-    assert digest(PROJECT / relative) == expected
+    assert matches_sha256(PROJECT / relative, expected)
 model_path = BASE / 'artifacts/training_04/altitude_residual_ridge.joblib'
 assert digest(model_path) == manifest['model_sha256']
 assert digest(BASE / 'data/2025-01-15/training_04_examples.parquet') == manifest['examples_sha256']

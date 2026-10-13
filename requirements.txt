@@ -9,3 +9,5 @@ scikit-learn>=1.7
 scipy
 joblib
 catboost>=1.2.10
+metar==2.0.1
+orjson>=3.13
