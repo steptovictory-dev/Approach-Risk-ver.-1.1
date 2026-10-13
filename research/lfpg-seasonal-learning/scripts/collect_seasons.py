@@ -46,3 +46,7 @@ if __name__ == '__main__':
         status = list(pool.map(collect, ['spring', 'summer', 'autumn']))
     if any(len(item['ready']) < 10 for item in status):
         raise SystemExit('Не все сезоны набрали десять дней, обучение не запускалось')
+    from train_models import run
+    run(seasons=['spring', 'summer', 'autumn'])
+    import build_training_notebook
+    print('EXPERIMENT_DONE reports/final_table.csv notebooks/02_seasonal_training.ipynb', flush=True)

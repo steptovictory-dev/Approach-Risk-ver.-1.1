@@ -65,6 +65,6 @@
 
 Для проверки фактических заходов выполнить `python research/lfpg-seasonal-learning/scripts/collect_days.py YYYY-MM-DD`. Суточный архив ADSB.lol занимает несколько гигабайт; исходные файлы, их контрольные суммы и извлеченные траектории сохраняются локально в `data/`.
 
-`python research/lfpg-seasonal-learning/scripts/prepare_examples.py YYYY-MM-DD` строит наблюдаемые обучающие пары по прежним причинным признакам. `python research/lfpg-seasonal-learning/scripts/collect_seasons.py` собирает по десять готовых дней весны, лета и осени. После подтверждения всех дней `python research/lfpg-seasonal-learning/scripts/train_models.py` запускает обучение трех сезонов и сохраняет итоговую таблицу, сравнение переноса между сезонами и кривые обучения. При нехватке подтвержденных дней обучение не начинается.
+`python research/lfpg-seasonal-learning/scripts/prepare_examples.py YYYY-MM-DD` строит наблюдаемые обучающие пары по прежним причинным признакам. `python research/lfpg-seasonal-learning/scripts/collect_seasons.py` собирает по десять готовых дней весны, лета и осени, затем автоматически обучает модели и выполняет итоговый ноутбук. При нехватке подтвержденных дней обучение не начинается, состояние каждого сезона сохраняется локально в `data/*_collection.json`. Отдельный повтор обучения на уже готовых днях: `python research/lfpg-seasonal-learning/scripts/train_models.py`.
 
 `python research/lfpg-seasonal-learning/scripts/build_training_notebook.py` выполняет ноутбук с таблицей и рисунками после завершенного обучения.
