@@ -104,7 +104,6 @@ def run(winter_days=9, seasons=None):
     assert frame.origin_metar_available_time.le(frame.origin_time).all()
     assert frame.target_time.lt(frame.boundary_time).all()
     assert frame.horizon_s.between(27, 33).all()
-    sample_per_day = min(30, int(frame.loc[frame.split.eq('train')].groupby('day').event_id.nunique().min()))
     search, parameters, models, metrics, learning = [], {}, {}, [], []
     tests = {s: frame.loc[frame.season.eq(s) & frame.split.eq('test')] for s in seasons}
     tests['all'] = frame.loc[frame.split.eq('test')]
@@ -137,27 +136,15 @@ def run(winter_days=9, seasons=None):
         pool = sorted(train.day.unique())
         sizes = sorted({n for n in [1, 2, 3, 5, len(pool)] if n <= len(pool)})
         test = tests[season]
-        for repeat in range(3):
-            order = np.random.default_rng(SEED + repeat).permutation(pool)
-            for size in sizes:
-                days = order[:size].tolist()
-                for mode in ['more_approaches', 'same_approaches']:
-                    # Бюджет зависит от доступных обучающих заходов, а не от тестовых ошибок
-                    budget = sample_per_day * size if mode == 'more_approaches' else sample_per_day
-                    event_ids = []
-                    for index, day in enumerate(days):
-                        events = train.loc[train.day.eq(day), 'event_id'].unique()
-                        count = budget // size + (index < budget % size)
-                        event_ids.extend(np.random.default_rng(SEED + repeat + index).choice(events, count, replace=False))
-                    subset = train.loc[train.event_id.isin(event_ids)]
-                    assert subset.event_id.nunique() == budget
-                    for name in ['Ridge', 'Polynomial Ridge']:
-                        model, converged = fit(name, parameters[season, name], subset, features)
-                        result = summarize(test, forecast(model, test, features), name)
-                        learning.append({**result, 'season': season, 'mode': mode, 'repeat': repeat,
-                                         'train_days': size, 'train_approaches': budget,
-                                         'sample_per_day': sample_per_day,
-                                         'training_dates': '|'.join(days), 'converged': converged})
+        for size in sizes:
+            days = pool[:size]
+            subset = train.loc[train.day.isin(days)]
+            for name in FAMILIES:
+                model, converged = fit(name, parameters[season, name], subset, features)
+                result = summarize(test, forecast(model, test, features), name)
+                learning.append({**result, 'season': season,
+                                 'train_days': size, 'train_approaches': subset.event_id.nunique(),
+                                 'training_dates': '|'.join(days), 'converged': converged})
     report = pd.DataFrame(metrics)
     report.to_csv(BASE / 'reports/model_metrics.csv', index=False)
     pd.DataFrame(search).to_csv(BASE / 'reports/model_search.csv', index=False)

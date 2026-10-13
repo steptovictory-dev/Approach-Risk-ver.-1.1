@@ -46,31 +46,27 @@ display(shown.style.format('{:.2f}').highlight_min(axis=0, color='#DDEFE8'))
 '''))
 cells.append(nbf.v4.new_markdown_cell(
     '## Влияние числа дней\n\n'
-    'Ridge и Polynomial Ridge используют одни и те же проверочные дни при изменении '
-    'обучающей выборки. Первый вариант берет одинаковое число заходов каждого включенного дня. '
-    'Во втором тот же бюджет распределен между днями: это контроль разнообразия '
-    'при одинаковом числе заходов. Кривые усреднены по трем вложенным наборам дней; '
-    'диапазон показывает их минимум и максимум, а не доверительный интервал. '
+    'Четыре модели используют одни и те же проверочные дни при добавлении '
+    'обучающих дней по порядку дат. Берем все пригодные примеры включенных дней. '
+    'Это первое сравнение: одновременно растут число примеров и разнообразие дней. '
     'Параметры фиксируются после выбора по валидации полного обучающего набора сезона'))
-cells.append(nbf.v4.new_code_cell('''budget = int(learning.sample_per_day.iloc[0])
-for mode, title in [('more_approaches', f'По {budget} заходов каждого дня'),
-                    ('same_approaches', f'Всего {budget} заходов на все обучающие дни')]:
-    fig, axes = plt.subplots(2, 2, figsize=(11, 7), sharey=True)
-    for ax, season, label in zip(axes.flat, seasons, labels):
-        subset = learning.loc[learning.season.eq(season) & learning['mode'].eq(mode) & learning.converged]
-        for model, color in [('Ridge', '#00897B'), ('Polynomial Ridge', '#D65A4A')]:
-            values = subset.loc[subset.model.eq(model)].groupby('train_days').macro_mae_ft.agg(['mean', 'min', 'max'])
-            ax.plot(values.index, values['mean'], marker='o', color=color, label=model)
-            ax.fill_between(values.index, values['min'], values['max'], color=color, alpha=.12)
-        ax.set(title=label, xlabel='Обучающих дней', ylabel='MAE, ft')
-        ax.grid(axis='y', alpha=.15)
-    axes[0, 0].legend(frameon=False)
-    for ax in list(axes.flat)[len(seasons):]:
-        ax.set_visible(False)
-    fig.suptitle(title)
-    fig.tight_layout()
-    fig.savefig(base / f'figures/02_{mode}.png', dpi=180, bbox_inches='tight')
-    plt.show()
+cells.append(nbf.v4.new_code_cell('''fig, axes = plt.subplots(2, 2, figsize=(11, 7), sharey=True)
+for ax, season, label in zip(axes.flat, seasons, labels):
+    subset = learning.loc[learning.season.eq(season) & learning.converged]
+    for model, color in [('Ridge', '#00897B'), ('Polynomial Ridge', '#D65A4A'),
+                         ('Huber', '#25343B'), ('ElasticNet', '#829198')]:
+        values = subset.loc[subset.model.eq(model)].sort_values('train_days')
+        ax.plot(values.train_days, values.macro_mae_ft, marker='o', color=color, label=model)
+    ax.set(title=label, xlabel='Обучающих дней', ylabel='MAE, ft')
+    ax.grid(axis='y', alpha=.15)
+axes[0, 0].legend(frameon=False)
+for ax in list(axes.flat)[len(seasons):]:
+    ax.set_visible(False)
+fig.suptitle('Добавление обучающих дней')
+fig.tight_layout()
+fig.savefig(base / 'figures/02_learning.png', dpi=180, bbox_inches='tight')
+plt.show()
+display(learning[['season', 'model', 'train_days', 'train_approaches', 'macro_mae_ft']])
 '''))
 cells.append(nbf.v4.new_markdown_cell(
     '## Перенос между сезонами\n\n'

@@ -34,7 +34,7 @@ def runway_geometry(runways):
 
 def attach_qnh(points, weather_path, airport_elevation_ft, delay_minutes=15):
     metar = pd.read_csv(weather_path)
-    metar['observation_utc'] = pd.to_datetime(metar.valid, utc=True).astype('datetime64[ns, UTC]')
+    metar['observation_utc'] = pd.to_datetime(metar.valid, utc=True).dt.floor('s').astype('datetime64[s, UTC]')
     # Используем только наблюдаемую часть METAR до трендов и замечаний
     body = metar.metar.str.split(r'\s(?:TEMPO|BECMG|RMK)\s', n=1, regex=True).str[0]
     metar['qnh_hpa'] = pd.to_numeric(body.str.extract(r'\bQ(\d{4})\b', expand=False), errors='coerce')
@@ -43,9 +43,11 @@ def attach_qnh(points, weather_path, airport_elevation_ft, delay_minutes=15):
     conflicts = eligible.groupby('observation_utc').qnh_hpa.nunique()
     assert not conflicts.gt(1).any(), 'Неоднозначный QNH в одну отметку времени'
     eligible = eligible.sort_values('observation_utc').drop_duplicates('observation_utc')
-    eligible['assumed_available_utc'] = eligible.observation_utc + pd.Timedelta(minutes=delay_minutes)
+    eligible['assumed_available_utc'] = (eligible.observation_utc
+        + pd.Timedelta(minutes=delay_minutes)).astype('datetime64[s, UTC]')
     frame = points.copy()
-    frame['utc'] = pd.to_datetime(frame.time, unit='s', utc=True).astype('datetime64[ns, UTC]')
+    # Отбрасываем доли секунды для причинного соединения с METAR
+    frame['utc'] = pd.to_datetime(frame.time, unit='s', utc=True).dt.floor('s').astype('datetime64[s, UTC]')
     frame = pd.merge_asof(frame.sort_values('utc'),
         eligible[['observation_utc', 'assumed_available_utc', 'qnh_hpa']].sort_values('assumed_available_utc'),
         left_on='utc', right_on='assumed_available_utc', direction='backward')
