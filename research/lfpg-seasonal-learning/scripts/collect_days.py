@@ -105,7 +105,7 @@ def analyze(date):
         output / 'selected_09l_points.parquet', index=False)
     arrivals = events.loc[events.direction.eq('arrival')]
     result = {'date': date, 'arrivals_by_runway': arrivals.runway.value_counts().to_dict(),
-              'eligible_09l': len(selected), 'enough_approaches': len(selected) >= 20}
+              'eligible_09l': len(selected), 'enough_approaches': len(selected) >= 15}
     (output / 'day_result.json').write_text(json.dumps(result, indent=2), encoding='utf-8')
     print('DAY_RESULT', json.dumps(result), flush=True)
     return result

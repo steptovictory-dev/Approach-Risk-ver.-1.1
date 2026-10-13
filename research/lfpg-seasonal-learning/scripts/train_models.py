@@ -70,7 +70,7 @@ def choose_days(expected):
         file = BASE / 'data' / item.date / 'examples.parquet'
         if file.exists():
             examples = pd.read_parquet(file)
-            if examples.event_id.nunique() >= 20:
+            if examples.event_id.nunique() >= 15:
                 rows.append({'day': item.date, 'season': item.season,
                              'approaches': examples.event_id.nunique(), 'examples': len(examples)})
     inventory = pd.DataFrame(rows, columns=['day', 'season', 'approaches', 'examples'])
