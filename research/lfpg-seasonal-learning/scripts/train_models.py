@@ -84,16 +84,16 @@ def choose_days(expected):
     chosen['split'] = 'train'
     for season in expected:
         indexes = chosen.index[chosen.season.eq(season)]
-        chosen.loc[indexes[-3], 'split'] = 'validation'
-        chosen.loc[indexes[-2:], 'split'] = 'test'
+        chosen.loc[indexes[-2], 'split'] = 'validation'
+        chosen.loc[indexes[-1], 'split'] = 'test'
     (BASE / 'reports').mkdir(exist_ok=True)
     chosen.to_csv(BASE / 'reports/selected_days.csv', index=False)
     return chosen
 
 
-def run(winter_days=9, seasons=None):
+def run(winter_days=9, seasons=None, days_per_season=5):
     seasons = seasons or ['spring', 'summer', 'autumn']
-    expected = {s: winter_days if s == 'winter' else 10 for s in seasons}
+    expected = {s: winter_days if s == 'winter' else days_per_season for s in seasons}
     chosen = choose_days(expected)
     features = json.loads((PROJECT / 'configs/lfpg_09l_training.json').read_text(encoding='utf-8'))['features']
     frame = pd.concat([pd.read_parquet(BASE / 'data' / row.day / 'examples.parquet')
@@ -165,5 +165,6 @@ if __name__ == '__main__':
     parser.add_argument('--winter-days', type=int, default=9, choices=range(4, 10))
     parser.add_argument('--seasons', nargs='+', choices=SEASONS,
                         default=['spring', 'summer', 'autumn'])
+    parser.add_argument('--days-per-season', type=int, default=5, choices=range(3, 11))
     args = parser.parse_args()
-    run(args.winter_days, args.seasons)
+    run(args.winter_days, args.seasons, args.days_per_season)
