@@ -1,0 +1,25 @@
+source,model,parameters,validation_mae_ft,converged
+spring,Ridge,"{""alpha"": 1}",26.611881829526,True
+spring,Ridge,"{""alpha"": 10}",25.05108533972088,True
+spring,Ridge,"{""alpha"": 100}",26.38110083192728,True
+spring,Polynomial Ridge,"{""alpha"": 1}",23.294084673234003,True
+spring,Polynomial Ridge,"{""alpha"": 10}",24.165537292279758,True
+spring,Polynomial Ridge,"{""alpha"": 100}",26.625748769525323,True
+summer,Ridge,"{""alpha"": 1}",22.046142015828615,True
+summer,Ridge,"{""alpha"": 10}",21.932128426921448,True
+summer,Ridge,"{""alpha"": 100}",21.773364290788372,True
+summer,Polynomial Ridge,"{""alpha"": 1}",20.94811294437167,True
+summer,Polynomial Ridge,"{""alpha"": 10}",20.70251879935616,True
+summer,Polynomial Ridge,"{""alpha"": 100}",21.030153460481092,True
+autumn,Ridge,"{""alpha"": 1}",22.58049794637739,True
+autumn,Ridge,"{""alpha"": 10}",20.622519791109838,True
+autumn,Ridge,"{""alpha"": 100}",21.53651943756601,True
+autumn,Polynomial Ridge,"{""alpha"": 1}",21.511897850805823,True
+autumn,Polynomial Ridge,"{""alpha"": 10}",20.133184733460883,True
+autumn,Polynomial Ridge,"{""alpha"": 100}",22.401079434137827,True
+pooled,Ridge,"{""alpha"": 1}",22.398563408535747,True
+pooled,Ridge,"{""alpha"": 10}",22.367554095556585,True
+pooled,Ridge,"{""alpha"": 100}",22.35403817138994,True
+pooled,Polynomial Ridge,"{""alpha"": 1}",21.080185917486002,True
+pooled,Polynomial Ridge,"{""alpha"": 10}",21.125481788140966,True
+pooled,Polynomial Ridge,"{""alpha"": 100}",21.635613056002274,True

@@ -1,0 +1,2 @@
+id,ident,type,name,latitude_deg,longitude_deg,elevation_ft,continent,iso_country,iso_region,municipality,scheduled_service,icao_code,iata_code,gps_code,local_code,home_link,wikipedia_link,keywords
+2212,EDDF,large_airport,Frankfurt Main Airport,50.026706,8.55835,364.0,EU,DE,DE-HE,Frankfurt am Main,yes,EDDF,FRA,EDDF,,https://www.frankfurt-airport.de/,https://en.wikipedia.org/wiki/Frankfurt_Airport,"EDAF, Frankfurt am Main, Frankfurt Main, Rhein-Main Air Base, Zeppelinheim"

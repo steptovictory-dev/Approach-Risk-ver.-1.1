@@ -1,0 +1,11 @@
+{
+  "airport": "EDDF",
+  "runway": "07L",
+  "sources": {
+    "airports": "https://davidmegginson.github.io/ourairports-data/airports.csv",
+    "runways": "https://davidmegginson.github.io/ourairports-data/runways.csv"
+  },
+  "runway_confirmation": "https://www.fraport.com/en/sustainability/dialog-with-neighbors/noise-and-air/flight-operations/runway-system-and-operating-hours.html",
+  "research_proxy": true,
+  "historical_operational_applicability_verified": false
+}
