@@ -1,4 +1,28 @@
 source,model,parameters,validation_mae_ft,converged
+spring,Ridge,"{""alpha"": 1}",17.767615708138322,True
+spring,Ridge,"{""alpha"": 10}",18.54059830685976,True
+spring,Ridge,"{""alpha"": 100}",19.95332325811812,True
+spring,Polynomial Ridge,"{""alpha"": 1}",17.35950178761936,True
+spring,Polynomial Ridge,"{""alpha"": 10}",18.064819188655896,True
+spring,Polynomial Ridge,"{""alpha"": 100}",19.421889059867148,True
+spring,Huber,"{""epsilon"": 1.2, ""alpha"": 0.01, ""max_iter"": 3000}",17.807487344604855,True
+spring,Huber,"{""epsilon"": 1.35, ""alpha"": 0.01, ""max_iter"": 3000}",17.823506889185964,True
+spring,Huber,"{""epsilon"": 1.5, ""alpha"": 0.01, ""max_iter"": 3000}",17.833431948762072,True
+spring,ElasticNet,"{""alpha"": 0.001, ""l1_ratio"": 0.1, ""max_iter"": 20000}",18.051371500143475,True
+spring,ElasticNet,"{""alpha"": 0.01, ""l1_ratio"": 0.1, ""max_iter"": 20000}",19.613609634493812,True
+spring,ElasticNet,"{""alpha"": 0.1, ""l1_ratio"": 0.1, ""max_iter"": 20000}",21.60820689065484,True
+summer,Ridge,"{""alpha"": 1}",19.386039400444208,True
+summer,Ridge,"{""alpha"": 10}",23.777965444713104,True
+summer,Ridge,"{""alpha"": 100}",26.05822000985346,True
+summer,Polynomial Ridge,"{""alpha"": 1}",19.533609743883442,True
+summer,Polynomial Ridge,"{""alpha"": 10}",22.202247511591718,True
+summer,Polynomial Ridge,"{""alpha"": 100}",24.95316381570882,True
+summer,Huber,"{""epsilon"": 1.2, ""alpha"": 0.01, ""max_iter"": 3000}",18.525642451379635,True
+summer,Huber,"{""epsilon"": 1.35, ""alpha"": 0.01, ""max_iter"": 3000}",18.45980836152717,True
+summer,Huber,"{""epsilon"": 1.5, ""alpha"": 0.01, ""max_iter"": 3000}",18.446492912199005,True
+summer,ElasticNet,"{""alpha"": 0.001, ""l1_ratio"": 0.1, ""max_iter"": 20000}",20.361073321849904,True
+summer,ElasticNet,"{""alpha"": 0.01, ""l1_ratio"": 0.1, ""max_iter"": 20000}",24.558556947760263,True
+summer,ElasticNet,"{""alpha"": 0.1, ""l1_ratio"": 0.1, ""max_iter"": 20000}",26.741347065771574,True
 autumn,Ridge,"{""alpha"": 1}",14.4512155171175,True
 autumn,Ridge,"{""alpha"": 10}",14.864660007161362,True
 autumn,Ridge,"{""alpha"": 100}",16.550369446971636,True
@@ -11,15 +35,15 @@ autumn,Huber,"{""epsilon"": 1.5, ""alpha"": 0.01, ""max_iter"": 3000}",14.509987
 autumn,ElasticNet,"{""alpha"": 0.001, ""l1_ratio"": 0.1, ""max_iter"": 20000}",14.511586693149706,True
 autumn,ElasticNet,"{""alpha"": 0.01, ""l1_ratio"": 0.1, ""max_iter"": 20000}",15.4097110424039,True
 autumn,ElasticNet,"{""alpha"": 0.1, ""l1_ratio"": 0.1, ""max_iter"": 20000}",19.41425753023237,True
-pooled,Ridge,"{""alpha"": 1}",14.4512155171175,True
-pooled,Ridge,"{""alpha"": 10}",14.864660007161362,True
-pooled,Ridge,"{""alpha"": 100}",16.550369446971636,True
-pooled,Polynomial Ridge,"{""alpha"": 1}",14.412263997255224,True
-pooled,Polynomial Ridge,"{""alpha"": 10}",14.932651560399405,True
-pooled,Polynomial Ridge,"{""alpha"": 100}",15.338666604402118,True
-pooled,Huber,"{""epsilon"": 1.2, ""alpha"": 0.01, ""max_iter"": 3000}",14.468822181124775,True
-pooled,Huber,"{""epsilon"": 1.35, ""alpha"": 0.01, ""max_iter"": 3000}",14.534418481876765,True
-pooled,Huber,"{""epsilon"": 1.5, ""alpha"": 0.01, ""max_iter"": 3000}",14.509987102173971,True
-pooled,ElasticNet,"{""alpha"": 0.001, ""l1_ratio"": 0.1, ""max_iter"": 20000}",14.511586693149706,True
-pooled,ElasticNet,"{""alpha"": 0.01, ""l1_ratio"": 0.1, ""max_iter"": 20000}",15.4097110424039,True
-pooled,ElasticNet,"{""alpha"": 0.1, ""l1_ratio"": 0.1, ""max_iter"": 20000}",19.41425753023237,True
+pooled,Ridge,"{""alpha"": 1}",17.420799476874425,True
+pooled,Ridge,"{""alpha"": 10}",17.68400931585518,True
+pooled,Ridge,"{""alpha"": 100}",19.09910911940865,True
+pooled,Polynomial Ridge,"{""alpha"": 1}",16.99051413285982,True
+pooled,Polynomial Ridge,"{""alpha"": 10}",17.304184657652193,True
+pooled,Polynomial Ridge,"{""alpha"": 100}",18.478839511405123,True
+pooled,Huber,"{""epsilon"": 1.2, ""alpha"": 0.01, ""max_iter"": 3000}",17.432534219134716,True
+pooled,Huber,"{""epsilon"": 1.35, ""alpha"": 0.01, ""max_iter"": 3000}",17.432889633567523,True
+pooled,Huber,"{""epsilon"": 1.5, ""alpha"": 0.01, ""max_iter"": 3000}",17.434131753124827,True
+pooled,ElasticNet,"{""alpha"": 0.001, ""l1_ratio"": 0.1, ""max_iter"": 20000}",17.67145872441307,True
+pooled,ElasticNet,"{""alpha"": 0.01, ""l1_ratio"": 0.1, ""max_iter"": 20000}",19.07863509915437,True
+pooled,ElasticNet,"{""alpha"": 0.1, ""l1_ratio"": 0.1, ""max_iter"": 20000}",21.506387897362988,True

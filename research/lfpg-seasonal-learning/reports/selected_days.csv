@@ -1,4 +1,14 @@
 day,season,approaches,examples,split
+2025-03-06,spring,103,1949,train
+2025-03-07,spring,85,1616,train
+2025-03-08,spring,94,1750,train
+2025-03-09,spring,88,1694,validation
+2025-03-17,spring,24,366,test
+2025-07-12,summer,13,338,train
+2025-08-10,summer,17,842,train
+2025-08-18,summer,24,819,train
+2025-08-24,summer,12,510,validation
+2025-08-25,summer,17,484,test
 2025-09-28,autumn,15,865,train
 2025-10-02,autumn,19,1354,train
 2025-10-07,autumn,14,1182,train

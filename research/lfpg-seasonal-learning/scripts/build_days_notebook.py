@@ -10,7 +10,8 @@ sys.stdout.reconfigure(encoding='utf-8')
 cells = [
     nbformat.v4.new_markdown_cell(
         '# Погожие дни для сезонного эксперимента\n\n'
-        'LFPG 09L, только 2025 год. Ищем 9 зимних дней и по 10 дней других сезонов. '
+        'LFPG 09L, только 2025 год. Берем по 5 дней весны, лета и осени. '
+        'Зимний пилот сохранен отдельно и не пересчитывается. '
         'Месяц внутри сезона любой. Здесь показан предварительный отбор по METAR; '
         'фактические заходы на полосу проверяются отдельно.\n\n'
         'Дневной интервал 08:00–18:00 по времени Парижа должен целиком проходить '
@@ -29,7 +30,7 @@ seasons = ['winter', 'spring', 'summer', 'autumn']
 labels = ['Зима', 'Весна', 'Лето', 'Осень']
 counts = candidates.groupby('season').size().reindex(seasons, fill_value=0)
 table = pd.DataFrame({'Сезон': labels, 'Погодных кандидатов': counts.to_numpy(),
-                      'Нужно подтвержденных дней': [9, 10, 10, 10]})
+                      'Нужно подтвержденных дней': ['Вне нового расчета', 5, 5, 5]})
 display(table.style.hide(axis='index'))
 '''),
     nbformat.v4.new_code_cell('''plt.rcParams.update({'font.family': 'DejaVu Sans', 'font.size': 12,
@@ -37,7 +38,7 @@ display(table.style.hide(axis='index'))
                      'text.color': '#25343B', 'axes.labelcolor': '#25343B'})
 fig, ax = plt.subplots(figsize=(9, 4.5))
 bars = ax.bar(labels, counts.to_numpy(), color=['#D65A4A', '#00897B', '#00897B', '#00897B'], width=0.55)
-ax.scatter(labels, [9, 10, 10, 10], color='#25343B', marker='D', s=40,
+ax.scatter(labels[1:], [5, 5, 5], color='#25343B', marker='D', s=40,
            zorder=3, label='Нужно подтвержденных дней')
 ax.bar_label(bars, padding=5)
 ax.set(title='Погодные кандидаты по сезонам, 2025', ylabel='Дней')
@@ -49,17 +50,14 @@ fig.savefig(base / 'figures/01_weather_candidates.png', dpi=180, bbox_inches='ti
 plt.show()
 '''),
     nbformat.v4.new_markdown_cell(
-        'Для зимы погодных кандидатов десять. '
-        'Проверка архива за 1 декабря нашла 69 геометрических заходов на 26L '
-        'и ни одного на 09L в дневном интервале. Поэтому зимних дней остается '
-        'максимум девять еще до проверки остальных кандидатов. '
-        'По решению пользователя ищем девять зимних дней и по десять дней других сезонов. '
+        'Погодные кандидаты проверены по всему дневному интервалу. '
+        'Для нового сравнения нужны 15 дней трех сезонов. '
         'Числа в таблице пока не означают готовую обучающую выборку. '
-        'Берем дни с десятками пригодных заходов на 09L.\n\n'
-        'В дальнейшем сравниваем Ridge, Huber, ElasticNet и Polynomial Ridge второй степени '
+        'Берем дни минимум с 10 пригодными заходами на 09L и 300 учебными парами.\n\n'
+        'Сравниваем Ridge, Huber, ElasticNet и Polynomial Ridge второй степени '
         'с прогнозом по постоянной вертикальной скорости. '
         'При изменении числа обучающих дней проверочные дни сохраняем одинаковыми. '
-        'Обучение пока не запускалось: еще проверяются заходы на 09L в зимних кандидатах')]
+        'Выбранные даты и выполненный расчет представлены в ноутбуке 02_seasonal_training.ipynb')]
 notebook = nbformat.v4.new_notebook(cells=cells, metadata={
     'kernelspec': {'display_name': 'Python 3', 'language': 'python', 'name': 'python3'}})
 path = BASE / 'notebooks/01_seasonal_days.ipynb'

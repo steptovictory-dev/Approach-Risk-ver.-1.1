@@ -1,6 +1,8 @@
 """Проверить погожие дни по фактическим заходам LFPG 09L"""
 from pathlib import Path
 from concurrent.futures import ThreadPoolExecutor
+from collections import defaultdict
+from threading import Lock
 import argparse
 import hashlib
 import json
@@ -15,6 +17,8 @@ from lfpg_archive_pilot import scan
 from lfpg_approach_audit import attach_qnh, find_events
 from lfpg_training import select_cohort
 
+DOWNLOAD_LOCKS = defaultdict(Lock)
+
 
 def request(url, headers=None):
     return urllib.request.urlopen(urllib.request.Request(url, headers={
@@ -22,6 +26,11 @@ def request(url, headers=None):
 
 
 def download(date):
+    with DOWNLOAD_LOCKS[date]:
+        return _download(date)
+
+
+def _download(date):
     folder = BASE / 'data' / date / 'archive'
     folder.mkdir(parents=True, exist_ok=True)
     manifest = folder / 'download_manifest.json'

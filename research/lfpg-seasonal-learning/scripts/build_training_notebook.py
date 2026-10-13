@@ -58,6 +58,7 @@ for ax, season, label in zip(axes.flat, seasons, labels):
         values = subset.loc[subset.model.eq(model)].sort_values('train_days')
         ax.plot(values.train_days, values.macro_mae_ft, marker='o', color=color, label=model)
     ax.set(title=label, xlabel='Обучающих дней', ylabel='MAE, ft')
+    ax.set_xticks(sorted(subset.train_days.unique()))
     ax.grid(axis='y', alpha=.15)
 axes[0, 0].legend(frameon=False)
 for ax in list(axes.flat)[len(seasons):]:
@@ -66,7 +67,8 @@ fig.suptitle('Добавление обучающих дней')
 fig.tight_layout()
 fig.savefig(base / 'figures/02_learning.png', dpi=180, bbox_inches='tight')
 plt.show()
-display(learning[['season', 'model', 'train_days', 'train_approaches', 'macro_mae_ft']])
+display(learning[['season', 'model', 'train_days', 'train_approaches', 'macro_mae_ft']]
+        .style.format({'macro_mae_ft': '{:.2f}'}).hide(axis='index'))
 '''))
 cells.append(nbf.v4.new_markdown_cell(
     '## Перенос между сезонами\n\n'
@@ -89,7 +91,33 @@ fig.tight_layout()
 fig.savefig(base / 'figures/02_transfer.png', dpi=180, bbox_inches='tight')
 plt.show()
 '''))
+import numpy as np
+import pandas as pd
+
+final = pd.read_csv(BASE / 'reports/final_table.csv', index_col=0)
+learning = pd.read_csv(BASE / 'reports/learning_curve.csv')
+winner = final.drop(index='Constant vertical rate')['all'].idxmin()
+baseline = final.loc['Constant vertical rate', 'all']
+best = final.loc[winner, 'all']
+lines = [f'Общая модель {winner}: MAE {best:.2f} ft против {baseline:.2f} ft '
+         f'у прогноза с постоянной вертикальной скоростью '
+         f'(снижение ошибки на {100 * (1 - best / baseline):.1f}%).']
+labels = {'spring': 'Весна', 'summer': 'Лето', 'autumn': 'Осень'}
+for season, group in learning.groupby('season', sort=False):
+    monotonic = sum(np.diff(values.sort_values('train_days').macro_mae_ft).max() <= 0
+                    for _, values in group.groupby('model'))
+    lines.append(f'{labels.get(season, season)}: при добавлении 1, 2 и 3 дней '
+                 f'ошибка последовательно снижалась у {monotonic} из 4 моделей.')
+lines.append('Больше дней не гарантирует меньшую ошибку. Здесь одновременно меняются '
+             'размер обучающего набора и состав дней; в каждом сезоне есть только один '
+             'тестовый день. Результаты относятся к краткосрочному прогнозу высоты, '
+             'а не к прогнозированию ухода на второй круг.')
+cells.append(nbf.v4.new_markdown_cell('## Выводы\n\n' + '\n\n'.join(lines)))
 notebook = nbf.v4.new_notebook(cells=cells, metadata={
     'kernelspec': {'display_name': 'Python 3', 'language': 'python', 'name': 'python3'}})
 execute(notebook, BASE / 'notebooks/02_seasonal_training.ipynb', BASE)
 print('Сезонный ноутбук обучения выполнен')
+if {'spring', 'summer', 'autumn'}.issubset(final.columns):
+    import build_days_notebook
+    from finalize_results import run as finalize
+    finalize()

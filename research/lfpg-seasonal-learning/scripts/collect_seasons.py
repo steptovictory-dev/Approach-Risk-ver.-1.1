@@ -3,7 +3,7 @@ from concurrent.futures import ThreadPoolExecutor
 import json
 import sys
 import pandas as pd
-from collect_days import BASE, analyze
+from collect_days import BASE, analyze, download
 from prepare_examples import prepare
 
 TARGET = 5
@@ -13,6 +13,13 @@ def collect(season):
     candidates = pd.read_csv(BASE / 'data/weather_candidates_2025.csv')
     candidates = candidates.loc[candidates.season.eq(season)].sort_values(
         ['east_fair_fraction', 'date'], ascending=[False, True])
+    if season == 'spring':
+        priority = {'2025-03-08': 0, '2025-03-09': 1, '2025-03-17': 2,
+                    '2025-03-07': 3, '2025-03-06': 4}
+        candidates = candidates.assign(priority=candidates.date.map(priority).fillna(10),
+                                       march_first=candidates.month.eq(3)).sort_values(
+            ['priority', 'march_first', 'east_fair_fraction', 'date'],
+            ascending=[True, False, False, True])
     ready, failures = [], []
     for date in candidates.date:
         folder = BASE / 'data' / date
@@ -44,8 +51,15 @@ def collect(season):
 
 if __name__ == '__main__':
     sys.stdout.reconfigure(encoding='utf-8')
-    with ThreadPoolExecutor(max_workers=3) as pool:
+    with ThreadPoolExecutor(max_workers=2) as prefetch, ThreadPoolExecutor(max_workers=3) as pool:
+        pending = [prefetch.submit(download, date) for date in ['2025-03-07', '2025-03-06']
+                   if not (BASE / 'data' / date / 'examples.parquet').exists()]
         status = list(pool.map(collect, ['spring', 'summer', 'autumn']))
+        for future in pending:
+            try:
+                future.result()
+            except Exception as error:
+                print('PREFETCH_ERROR', str(error), flush=True)
     if any(len(item['ready']) < TARGET for item in status):
         raise SystemExit('Не все сезоны набрали пять дней, обучение не запускалось')
     from train_models import run
