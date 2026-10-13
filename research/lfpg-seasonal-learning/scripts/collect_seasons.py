@@ -26,7 +26,7 @@ def collect(season):
                 if not (folder / 'day_result.json').exists():
                     analyze(date)
                 result = prepare(date)
-            if result['qualified_09l'] >= 15:
+            if result['qualified_09l'] >= 10 and result['examples'] >= 300:
                 ready.append(result)
             print(f'SEASON_PROGRESS {season} {len(ready)} / {TARGET} {date} '
                   f'{result["qualified_09l"]}', flush=True)

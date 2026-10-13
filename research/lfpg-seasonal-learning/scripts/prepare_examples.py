@@ -80,7 +80,8 @@ def prepare(date):
     examples.to_parquet(folder / 'examples.parquet', index=False)
     audit.to_csv(folder / 'examples_audit.csv', index=False)
     result = {'date': date, 'qualified_09l': examples.event_id.nunique(),
-              'examples': len(examples), 'enough_approaches': examples.event_id.nunique() >= 15}
+              'examples': len(examples),
+              'enough_approaches': examples.event_id.nunique() >= 10 and len(examples) >= 300}
     print('PREPARED_DAY', json.dumps(result), flush=True)
     return result
 
