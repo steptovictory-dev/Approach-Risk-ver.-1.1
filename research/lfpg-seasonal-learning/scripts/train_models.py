@@ -82,7 +82,7 @@ def choose_days(expected):
     chosen = pd.concat([inventory.loc[inventory.season.eq(s)].head(n)
                         for s, n in expected.items()], ignore_index=True)
     chosen['split'] = 'train'
-    for season in SEASONS:
+    for season in expected:
         indexes = chosen.index[chosen.season.eq(season)]
         chosen.loc[indexes[-3], 'split'] = 'validation'
         chosen.loc[indexes[-2:], 'split'] = 'test'
@@ -91,8 +91,9 @@ def choose_days(expected):
     return chosen
 
 
-def run(winter_days):
-    expected = {'winter': winter_days, 'spring': 10, 'summer': 10, 'autumn': 10}
+def run(winter_days=9, seasons=None):
+    seasons = seasons or ['spring', 'summer', 'autumn']
+    expected = {s: winter_days if s == 'winter' else 10 for s in seasons}
     chosen = choose_days(expected)
     features = json.loads((PROJECT / 'configs/lfpg_09l_training.json').read_text(encoding='utf-8'))['features']
     frame = pd.concat([pd.read_parquet(BASE / 'data' / row.day / 'examples.parquet')
@@ -105,9 +106,9 @@ def run(winter_days):
     assert frame.horizon_s.between(27, 33).all()
     sample_per_day = min(30, int(frame.loc[frame.split.eq('train')].groupby('day').event_id.nunique().min()))
     search, parameters, models, metrics, learning = [], {}, {}, [], []
-    tests = {s: frame.loc[frame.season.eq(s) & frame.split.eq('test')] for s in SEASONS}
+    tests = {s: frame.loc[frame.season.eq(s) & frame.split.eq('test')] for s in seasons}
     tests['all'] = frame.loc[frame.split.eq('test')]
-    for source in SEASONS + ['pooled']:
+    for source in seasons + ['pooled']:
         source_mask = frame.season.eq(source) if source != 'pooled' else pd.Series(True, index=frame.index)
         train = frame.loc[source_mask & frame.split.eq('train')]
         validation = frame.loc[source_mask & frame.split.eq('validation')]
@@ -131,7 +132,7 @@ def run(winter_days):
     for target, test in tests.items():
         metrics.append({**summarize(test, test.baseline_ft, 'Constant vertical rate'),
                         'source': 'baseline', 'target': target, 'train_days': 0, 'train_approaches': 0})
-    for season in SEASONS:
+    for season in seasons:
         train = frame.loc[frame.season.eq(season) & frame.split.eq('train')]
         pool = sorted(train.day.unique())
         sizes = sorted({n for n in [1, 2, 3, 5, len(pool)] if n <= len(pool)})
@@ -163,7 +164,7 @@ def run(winter_days):
     pd.DataFrame(learning).to_csv(BASE / 'reports/learning_curve.csv', index=False)
     final = report.loc[report.source.isin(['pooled', 'baseline'])].pivot(
         index='model', columns='target', values='macro_mae_ft').reindex(
-        list(FAMILIES) + ['Constant vertical rate'])[SEASONS + ['all']]
+        list(FAMILIES) + ['Constant vertical rate'])[seasons + ['all']]
     final.to_csv(BASE / 'reports/final_table.csv')
     artifacts = BASE / 'artifacts'
     artifacts.mkdir(exist_ok=True)
@@ -175,4 +176,7 @@ if __name__ == '__main__':
     sys.stdout.reconfigure(encoding='utf-8')
     parser = argparse.ArgumentParser()
     parser.add_argument('--winter-days', type=int, default=9, choices=range(4, 10))
-    run(parser.parse_args().winter_days)
+    parser.add_argument('--seasons', nargs='+', choices=SEASONS,
+                        default=['spring', 'summer', 'autumn'])
+    args = parser.parse_args()
+    run(args.winter_days, args.seasons)

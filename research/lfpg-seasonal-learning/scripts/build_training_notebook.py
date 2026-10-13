@@ -28,8 +28,9 @@ days = pd.read_csv(base / 'reports/selected_days.csv')
 metrics = pd.read_csv(base / 'reports/model_metrics.csv')
 learning = pd.read_csv(base / 'reports/learning_curve.csv')
 table = pd.read_csv(base / 'reports/final_table.csv', index_col=0)
-seasons = ['winter', 'spring', 'summer', 'autumn']
-labels = ['Зима', 'Весна', 'Лето', 'Осень']
+season_labels = {'winter': 'Зима', 'spring': 'Весна', 'summer': 'Лето', 'autumn': 'Осень'}
+seasons = [s for s in season_labels if s in table.columns]
+labels = [season_labels[s] for s in seasons]
 plt.rcParams.update({'font.family': 'DejaVu Sans', 'font.size': 11,
                      'axes.spines.top': False, 'axes.spines.right': False})
 display(days.groupby(['season', 'split']).agg(Дней=('day', 'size'),
@@ -37,7 +38,7 @@ display(days.groupby(['season', 'split']).agg(Дней=('day', 'size'),
 '''))
 cells.append(nbf.v4.new_markdown_cell(
     '## Итоговая таблица\n\n'
-    'Обучение на всех доступных обучающих днях четырех сезонов. '
+    'Обучение на всех доступных обучающих днях выбранных сезонов. '
     'Ошибка MAE усредняется сначала внутри каждого захода, затем между заходами; '
     'единица измерения ft. Проверочные дни одинаковы для всех моделей'))
 cells.append(nbf.v4.new_code_cell('''shown = table.rename(columns=dict(zip(seasons + ['all'], labels + ['Все сезоны'])))
@@ -64,6 +65,8 @@ for mode, title in [('more_approaches', f'По {budget} заходов кажд�
         ax.set(title=label, xlabel='Обучающих дней', ylabel='MAE, ft')
         ax.grid(axis='y', alpha=.15)
     axes[0, 0].legend(frameon=False)
+    for ax in list(axes.flat)[len(seasons):]:
+        ax.set_visible(False)
     fig.suptitle(title)
     fig.tight_layout()
     fig.savefig(base / f'figures/02_{mode}.png', dpi=180, bbox_inches='tight')
@@ -80,10 +83,10 @@ transfer = transfer.reindex(index=seasons, columns=seasons)
 fig, ax = plt.subplots(figsize=(7, 5.5))
 cmap = LinearSegmentedColormap.from_list('seasonal', ['#00897B', '#F4F7F6', '#D65A4A'])
 image = ax.imshow(transfer.to_numpy(), cmap=cmap)
-ax.set(xticks=range(4), xticklabels=labels, yticks=range(4), yticklabels=labels,
+ax.set(xticks=range(len(seasons)), xticklabels=labels, yticks=range(len(seasons)), yticklabels=labels,
        xlabel='Сезон проверки', ylabel='Сезон обучения', title='Ridge: перенос между сезонами')
-for row in range(4):
-    for column in range(4):
+for row in range(len(seasons)):
+    for column in range(len(seasons)):
         ax.text(column, row, f'{transfer.iloc[row, column]:.1f}', ha='center', va='center', color='#25343B')
 fig.colorbar(image, ax=ax, label='MAE, ft')
 fig.tight_layout()
