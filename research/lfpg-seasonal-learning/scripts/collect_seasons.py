@@ -65,4 +65,4 @@ if __name__ == '__main__':
     from train_models import run
     run(seasons=['spring', 'summer', 'autumn'], days_per_season=TARGET)
     import build_training_notebook
-    print('EXPERIMENT_DONE reports/final_table.csv notebooks/02_seasonal_training.ipynb', flush=True)
+    print('EXPERIMENT_DONE reports/csv/final_table.csv notebooks/02_seasonal_training.ipynb', flush=True)

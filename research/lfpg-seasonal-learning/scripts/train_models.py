@@ -86,8 +86,8 @@ def choose_days(expected):
         indexes = chosen.index[chosen.season.eq(season)]
         chosen.loc[indexes[-2], 'split'] = 'validation'
         chosen.loc[indexes[-1], 'split'] = 'test'
-    (BASE / 'reports').mkdir(exist_ok=True)
-    chosen.to_csv(BASE / 'reports/selected_days.csv', index=False)
+    (BASE / 'reports/csv').mkdir(parents=True, exist_ok=True)
+    chosen.to_csv(BASE / 'reports/csv/selected_days.csv', index=False)
     return chosen
 
 
@@ -146,13 +146,13 @@ def run(winter_days=9, seasons=None, days_per_season=5):
                                  'train_days': size, 'train_approaches': subset.event_id.nunique(),
                                  'training_dates': '|'.join(days), 'converged': converged})
     report = pd.DataFrame(metrics)
-    report.to_csv(BASE / 'reports/model_metrics.csv', index=False)
-    pd.DataFrame(search).to_csv(BASE / 'reports/model_search.csv', index=False)
-    pd.DataFrame(learning).to_csv(BASE / 'reports/learning_curve.csv', index=False)
+    report.to_csv(BASE / 'reports/csv/model_metrics.csv', index=False)
+    pd.DataFrame(search).to_csv(BASE / 'reports/csv/model_search.csv', index=False)
+    pd.DataFrame(learning).to_csv(BASE / 'reports/csv/learning_curve.csv', index=False)
     final = report.loc[report.source.isin(['pooled', 'baseline'])].pivot(
         index='model', columns='target', values='macro_mae_ft').reindex(
         list(FAMILIES) + ['Constant vertical rate'])[seasons + ['all']]
-    final.to_csv(BASE / 'reports/final_table.csv')
+    final.to_csv(BASE / 'reports/csv/final_table.csv')
     artifacts = BASE / 'artifacts'
     artifacts.mkdir(exist_ok=True)
     joblib.dump({'models': models, 'parameters': parameters, 'features': features}, artifacts / 'models.joblib')

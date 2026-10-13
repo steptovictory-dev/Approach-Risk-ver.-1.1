@@ -23,15 +23,19 @@ cells = [
 import pandas as pd
 import matplotlib.pyplot as plt
 from IPython.display import display
-
+import sys
 base = Path.cwd()
+if not (base / 'scripts/table_style.py').is_file():
+    base = base.parent
+sys.path.insert(0, str(base / 'scripts'))
+from table_style import display_table
 candidates = pd.read_csv(base / 'data/weather_candidates_2025.csv')
 seasons = ['winter', 'spring', 'summer', 'autumn']
 labels = ['Зима', 'Весна', 'Лето', 'Осень']
 counts = candidates.groupby('season').size().reindex(seasons, fill_value=0)
 table = pd.DataFrame({'Сезон': labels, 'Погодных кандидатов': counts.to_numpy(),
                       'Нужно подтвержденных дней': ['Вне нового расчета', 5, 5, 5]})
-display(table.style.hide(axis='index'))
+display_table(display, table.style.hide(axis='index'))
 '''),
     nbformat.v4.new_code_cell('''plt.rcParams.update({'font.family': 'DejaVu Sans', 'font.size': 12,
                      'axes.spines.top': False, 'axes.spines.right': False,

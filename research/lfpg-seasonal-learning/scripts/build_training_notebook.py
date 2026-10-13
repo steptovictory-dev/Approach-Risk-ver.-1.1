@@ -20,20 +20,23 @@ cells = [nbf.v4.new_markdown_cell(
 cells.append(nbf.v4.new_code_cell('''from pathlib import Path
 import pandas as pd
 import matplotlib.pyplot as plt
-from matplotlib.colors import LinearSegmentedColormap
 from IPython.display import display
-
+import sys
 base = Path.cwd()
-days = pd.read_csv(base / 'reports/selected_days.csv')
-metrics = pd.read_csv(base / 'reports/model_metrics.csv')
-learning = pd.read_csv(base / 'reports/learning_curve.csv')
-table = pd.read_csv(base / 'reports/final_table.csv', index_col=0)
+if not (base / 'scripts/table_style.py').is_file():
+    base = base.parent
+sys.path.insert(0, str(base / 'scripts'))
+from table_style import display_table
+days = pd.read_csv(base / 'reports/csv/selected_days.csv')
+metrics = pd.read_csv(base / 'reports/csv/model_metrics.csv')
+learning = pd.read_csv(base / 'reports/csv/learning_curve.csv')
+table = pd.read_csv(base / 'reports/csv/final_table.csv', index_col=0)
 season_labels = {'winter': 'Зима', 'spring': 'Весна', 'summer': 'Лето', 'autumn': 'Осень'}
 seasons = [s for s in season_labels if s in table.columns]
 labels = [season_labels[s] for s in seasons]
 plt.rcParams.update({'font.family': 'DejaVu Sans', 'font.size': 11,
                      'axes.spines.top': False, 'axes.spines.right': False})
-display(days.groupby(['season', 'split']).agg(Дней=('day', 'size'),
+display_table(display, days.groupby(['season', 'split']).agg(Дней=('day', 'size'),
              Заходов=('approaches', 'sum'), Пар=('examples', 'sum')))
 '''))
 cells.append(nbf.v4.new_markdown_cell(
@@ -42,7 +45,7 @@ cells.append(nbf.v4.new_markdown_cell(
     'Ошибка MAE усредняется сначала внутри каждого захода, затем между заходами; '
     'единица измерения ft. Проверочные дни одинаковы для всех моделей'))
 cells.append(nbf.v4.new_code_cell('''shown = table.rename(columns=dict(zip(seasons + ['all'], labels + ['Все сезоны'])))
-display(shown.style.format('{:.2f}').highlight_min(axis=0, color='#DDEFE8'))
+display_table(display, shown.style.format('{:.2f}').highlight_min(axis=0, color='#B6E66B'))
 '''))
 cells.append(nbf.v4.new_markdown_cell(
     '## Влияние числа дней\n\n'
@@ -67,35 +70,14 @@ fig.suptitle('Добавление обучающих дней')
 fig.tight_layout()
 fig.savefig(base / 'figures/02_learning.png', dpi=180, bbox_inches='tight')
 plt.show()
-display(learning[['season', 'model', 'train_days', 'train_approaches', 'macro_mae_ft']]
+display_table(display, learning[['season', 'model', 'train_days', 'train_approaches', 'macro_mae_ft']]
         .style.format({'macro_mae_ft': '{:.2f}'}).hide(axis='index'))
-'''))
-cells.append(nbf.v4.new_markdown_cell(
-    '## Перенос между сезонами\n\n'
-    'Для Ridge показана ошибка при обучении в одном сезоне и проверке на отложенных '
-    'днях всех сезонов. Параметры выбирались только по валидации обучающего сезона. '
-    'Это сравнение переноса между сезонными группами на отложенных днях'))
-cells.append(nbf.v4.new_code_cell('''transfer = metrics.loc[metrics.model.eq('Ridge') & metrics.source.isin(seasons)
-                       & metrics.target.isin(seasons)].pivot(index='source', columns='target', values='macro_mae_ft')
-transfer = transfer.reindex(index=seasons, columns=seasons)
-fig, ax = plt.subplots(figsize=(7, 5.5))
-cmap = LinearSegmentedColormap.from_list('seasonal', ['#00897B', '#F4F7F6', '#D65A4A'])
-image = ax.imshow(transfer.to_numpy(), cmap=cmap)
-ax.set(xticks=range(len(seasons)), xticklabels=labels, yticks=range(len(seasons)), yticklabels=labels,
-       xlabel='Сезон проверки', ylabel='Сезон обучения', title='Ridge: перенос между сезонами')
-for row in range(len(seasons)):
-    for column in range(len(seasons)):
-        ax.text(column, row, f'{transfer.iloc[row, column]:.1f}', ha='center', va='center', color='#25343B')
-fig.colorbar(image, ax=ax, label='MAE, ft')
-fig.tight_layout()
-fig.savefig(base / 'figures/02_transfer.png', dpi=180, bbox_inches='tight')
-plt.show()
 '''))
 import numpy as np
 import pandas as pd
 
-final = pd.read_csv(BASE / 'reports/final_table.csv', index_col=0)
-learning = pd.read_csv(BASE / 'reports/learning_curve.csv')
+final = pd.read_csv(BASE / 'reports/csv/final_table.csv', index_col=0)
+learning = pd.read_csv(BASE / 'reports/csv/learning_curve.csv')
 winner = final.drop(index='Constant vertical rate')['all'].idxmin()
 baseline = final.loc['Constant vertical rate', 'all']
 best = final.loc[winner, 'all']

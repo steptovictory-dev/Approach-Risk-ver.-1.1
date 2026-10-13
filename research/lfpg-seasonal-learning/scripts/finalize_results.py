@@ -17,11 +17,11 @@ def markdown(frame):
 
 
 def run():
-    days = pd.read_csv(BASE / 'reports/selected_days.csv')
+    days = pd.read_csv(BASE / 'reports/csv/selected_days.csv')
     assert days.groupby('season').size().to_dict() == {'autumn': 5, 'spring': 5, 'summer': 5}
-    metrics = pd.read_csv(BASE / 'reports/model_metrics.csv')
-    learning = pd.read_csv(BASE / 'reports/learning_curve.csv')
-    final = pd.read_csv(BASE / 'reports/final_table.csv', index_col=0)
+    metrics = pd.read_csv(BASE / 'reports/csv/model_metrics.csv')
+    learning = pd.read_csv(BASE / 'reports/csv/learning_curve.csv')
+    final = pd.read_csv(BASE / 'reports/csv/final_table.csv', index_col=0)
     assert len(learning) == 36
     assert learning.converged.all()
     assert metrics.macro_mae_ft.notna().all()
@@ -61,7 +61,7 @@ def run():
              'каждый сезон представлен одним тестовым днем. Это приблизительное сравнение '
              'краткосрочного прогноза высоты, а не оценка прогнозирования ухода на второй круг.\n\n'
              'Выполненный ноутбук: [02_seasonal_training.ipynb](../notebooks/02_seasonal_training.ipynb). '
-             'Полные результаты переноса всех четырех моделей: `model_metrics.csv`.\n')
+             'Полные результаты переноса всех четырех моделей: [model_metrics.csv](csv/model_metrics.csv).\n')
     (BASE / 'reports/RESULTS.md').write_text(text, encoding='utf-8')
     readme = BASE / 'README.md'
     previous = readme.read_text(encoding='utf-8')
