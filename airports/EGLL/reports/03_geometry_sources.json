@@ -1,0 +1,6 @@
+{
+  "url": "https://davidmegginson.github.io/ourairports-data/runways.csv",
+  "airport": "EGLL",
+  "note": "Current OurAirports geometry used as research proxy; not historical operational certification",
+  "elevation_ft": 83
+}

@@ -1,0 +1,11 @@
+numpy
+pandas
+pyarrow
+matplotlib
+nbformat
+nbclient
+ipykernel
+scikit-learn>=1.7
+joblib
+metar==2.0.1
+orjson>=3.13

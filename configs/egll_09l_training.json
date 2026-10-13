@@ -1,0 +1,26 @@
+{
+  "study": "EGLL 09L seasonal altitude forecasting",
+  "maximum_trace_gap_s": 30,
+  "minimum_precontrol_span_s": 60,
+  "control_height_proxy_ft": 300,
+  "airport_elevation_ft": 83,
+  "nominal_horizon_s": 30,
+  "target_time_tolerance_s": 3,
+  "history_minimum_s": 5,
+  "history_maximum_s": 30,
+  "features": [
+    "height_ft",
+    "vertical_rate_fps",
+    "past_height_rate_fps",
+    "speed_knots",
+    "distance_m",
+    "lateral_m",
+    "heading_error_deg",
+    "past_gap_s",
+    "horizon_s"
+  ],
+  "airport": "EGLL",
+  "runway": "09L",
+  "metar_delay_minutes": 15,
+  "include_archival_corrections": true
+}
