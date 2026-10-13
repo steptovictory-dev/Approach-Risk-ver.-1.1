@@ -47,6 +47,8 @@
 [Итоговая таблица](airports/LFPG/reports/06_final_table.csv): на 46 заходах нового дня Ridge дала MAE 17.52 ft против 55.97 ft у продолжения текущей Vz. Выбранная по validation полиномиальная Ridge получила 17.99 ft. Это прогноз барометрической высоты, а не классификация ухода. Воспроизведение: `python scripts/build_lfpg_multiday_notebook.py`; проверка: `python scripts/verify_lfpg_multiday.py`.
 ## Сезонное обучение
 
+[Общий результат двух исследований с графиками](research/seasonal-comparison/RESULTS.md): сравнение с baseline, выигрыш Polynomial Ridge и границы вывода по сезонам
+
 Одинаковый эксперимент на двух аэропортах: одна полоса, по пять погожих дней весны, лета и осени 2025 года, простые модели и прогноз высоты через 30 секунд.
 
 - [Париж LFPG 09L](research/lfpg-seasonal-learning/README.md): выполненное сезонное сравнение
