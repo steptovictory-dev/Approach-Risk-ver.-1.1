@@ -45,7 +45,7 @@ def attach_qnh(points, weather_path, airport_elevation_ft, delay_minutes=15):
     eligible = eligible.sort_values('observation_utc').drop_duplicates('observation_utc')
     eligible['assumed_available_utc'] = eligible.observation_utc + pd.Timedelta(minutes=delay_minutes)
     frame = points.copy()
-    frame['utc'] = pd.to_datetime(frame.time, unit='s', utc=True)
+    frame['utc'] = pd.to_datetime(frame.time, unit='s', utc=True).astype('datetime64[ns, UTC]')
     frame = pd.merge_asof(frame.sort_values('utc'),
         eligible[['observation_utc', 'assumed_available_utc', 'qnh_hpa']].sort_values('assumed_available_utc'),
         left_on='utc', right_on='assumed_available_utc', direction='backward')
@@ -124,7 +124,11 @@ def find_events(points, geometry, corridor_m=200, heading_tolerance_deg=15, gap_
                 group = group.copy()
                 group['event_id'], group['runway'], group['direction'] = event_id, runway.runway, direction
                 selected.append(group)
-    table = pd.DataFrame(events)
+    table = pd.DataFrame(events, columns=['event_id', 'trace_id', 'icao24', 'runway',
+        'direction', 'start_time', 'end_time', 'rows', 'span_s', 'height_min_ft',
+        'height_start_ft', 'height_end_ft', 'distance_end_m', 'median_abs_lateral_m',
+        'median_vertical_rate_fpm', 'max_gap_s', 'cross300_observed', 'cross300_gap_s',
+        'precontrol_span_s', 'precontrol_max_gap_s', 'qnh_age_max_s'])
     table['parallel_ambiguity'] = False
     # Сохраняем конкурирующие назначения, если окна одного трека существенно перекрываются
     for _, group in table.groupby(['trace_id', 'direction']):
@@ -137,4 +141,6 @@ def find_events(points, geometry, corridor_m=200, heading_tolerance_deg=15, gap_
     table['coverage300_candidate'] = (table.direction.eq('arrival') & table.cross300_observed
         & table.cross300_gap_s.le(15) & table.precontrol_max_gap_s.le(15)
         & table.precontrol_span_s.ge(60) & ~table.parallel_ambiguity)
-    return table, pd.concat(selected, ignore_index=True)
+    event_points = (pd.concat(selected, ignore_index=True) if selected
+                    else points.iloc[:0].assign(event_id='', runway='', direction=''))
+    return table, event_points

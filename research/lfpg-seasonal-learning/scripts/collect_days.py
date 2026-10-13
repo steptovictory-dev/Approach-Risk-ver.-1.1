@@ -16,9 +16,9 @@ from lfpg_approach_audit import attach_qnh, find_events
 from lfpg_training import select_cohort
 
 
-def request(url):
+def request(url, headers=None):
     return urllib.request.urlopen(urllib.request.Request(url, headers={
-        'User-Agent': 'Approach-Risk-Research'}), timeout=120)
+        'User-Agent': 'Approach-Risk-Research', **(headers or {})}), timeout=120)
 
 
 def download(date):
@@ -40,14 +40,28 @@ def download(date):
     def part(asset):
         path = folder / asset['name']
         if not path.exists() or path.stat().st_size != asset['size']:
-            with request(asset['browser_download_url']) as response, path.open('wb') as stream:
-                copied, next_message = 0, 512 * 1024 * 1024
-                while chunk := response.read(8 * 1024 * 1024):
-                    stream.write(chunk)
-                    copied += len(chunk)
-                    if copied >= next_message:
-                        print(date, path.suffix, round(copied / 1e9, 2), 'GB', flush=True)
-                        next_message += 512 * 1024 * 1024
+            offset = path.stat().st_size if path.exists() else 0
+            if offset >= asset['size']:
+                offset = 0
+            with request(asset['browser_download_url'],
+                         {'Range': f'bytes={offset}-'} if offset else None) as response:
+                resume = offset > 0 and response.status == 206
+                if resume:
+                    assert response.headers['Content-Range'].startswith(f'bytes {offset}-')
+                copied = offset if resume else 0
+                next_message = copied + 512 * 1024 * 1024
+                if resume:
+                    print('RESUME', date, path.suffix, round(offset / 1e9, 2), 'GB', flush=True)
+                stream = path.open('ab' if resume else 'wb')
+                try:
+                    while chunk := response.read(8 * 1024 * 1024):
+                        stream.write(chunk)
+                        copied += len(chunk)
+                        if copied >= next_message:
+                            print(date, path.suffix, round(copied / 1e9, 2), 'GB', flush=True)
+                            next_message += 512 * 1024 * 1024
+                finally:
+                    stream.close()
             assert path.stat().st_size == asset['size']
         with path.open('rb') as stream:
             digest = hashlib.file_digest(stream, 'sha256').hexdigest()
